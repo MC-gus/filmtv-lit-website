@@ -1,0 +1,78 @@
+---
+const navLinks = [
+  { href: '/', label: '首頁' },
+  { href: '/about', label: '學系簡介' },
+  { href: '/faculty', label: '師資陣容' },
+  { href: '/curriculum', label: '課程規劃' },
+  { href: '/works', label: '作品預告' },
+  { href: '/facilities', label: '設備環境' },
+  { href: '/admission', label: '招生資訊' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
+  <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex flex-col leading-tight group">
+      <span class="text-xs text-film-gold tracking-widest uppercase">Lee-Ming Institute of Technology</span>
+      <span class="text-lg font-display font-bold text-white group-hover:text-film-gold transition-colors">影視傳播系</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <ul class="hidden lg:flex items-center gap-8">
+      {navLinks.map(link => (
+        <li>
+          <a
+            href={link.href}
+            class={`text-sm tracking-wide transition-colors hover:text-film-gold ${
+              currentPath === link.href ? 'text-film-gold' : 'text-film-light/80'
+            }`}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Mobile Menu Button -->
+    <button id="menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="選單">
+      <span class="menu-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+      <span class="menu-line block w-6 h-0.5 bg-white transition-all duration-300"></span>
+      <span class="menu-line block w-4 h-0.5 bg-white transition-all duration-300"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-film-dark border-t border-white/10">
+    <ul class="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4">
+      {navLinks.map(link => (
+        <li>
+          <a href={link.href} class="block text-sm text-film-light/80 hover:text-film-gold py-1 transition-colors">
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  // 滾動時 Navbar 背景
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar?.classList.add('bg-film-black/90', 'backdrop-blur-md', 'border-b', 'border-white/10');
+    } else {
+      navbar?.classList.remove('bg-film-black/90', 'backdrop-blur-md', 'border-b', 'border-white/10');
+    }
+  });
+
+  // Mobile Menu
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>

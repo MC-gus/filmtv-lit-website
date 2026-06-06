@@ -1,0 +1,64 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+locale: zh_Hant
+
+collections:
+  # 最新消息
+  - name: news
+    label: 最新消息
+    folder: src/content/news
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: 標題, name: title, widget: string }
+      - { label: 發布日期, name: date, widget: datetime }
+      - { label: 分類, name: category, widget: select, options: [得獎消息, 產學合作, 校園活動, 招生資訊, 其他] }
+      - { label: 摘要, name: summary, widget: text }
+      - { label: 內文, name: body, widget: markdown }
+
+  # 師資陣容
+  - name: faculty
+    label: 師資陣容
+    folder: src/content/faculty
+    create: true
+    fields:
+      - { label: 姓名, name: name, widget: string }
+      - { label: 職稱, name: title, widget: string }
+      - { label: 專長領域, name: specialty, widget: string }
+      - { label: 照片, name: photo, widget: image, required: false }
+      - { label: 簡介, name: bio, widget: text }
+      - { label: 排序, name: order, widget: number, default: 99 }
+
+  # 作品預告
+  - name: works
+    label: 作品預告
+    folder: src/content/works
+    create: true
+    fields:
+      - { label: 作品名稱, name: title, widget: string }
+      - { label: 年份, name: year, widget: string }
+      - { label: YouTube 連結, name: youtube, widget: string, required: false }
+      - { label: 封面圖片, name: cover, widget: image, required: false }
+      - { label: 作品描述, name: description, widget: text }
+      - { label: 類型, name: type, widget: select, options: [短片, 紀錄片, 廣告, 音樂錄影帶, 畢業製作] }
+
+  # 網站設定（首頁可編輯內容）
+  - name: settings
+    label: 網站設定
+    files:
+      - label: 首頁設定
+        name: home
+        file: src/content/settings/home.json
+        fields:
+          - { label: Hero 標語（第一行）, name: hero_line1, widget: string, default: 用鏡頭說故事，以影像探索世界 }
+          - { label: Hero 標語（第二行）, name: hero_line2, widget: string, default: 培育下一代影視創作者 }
+          - { label: 系所介紹（第一段）, name: about_p1, widget: text }
+          - { label: 系所介紹（第二段）, name: about_p2, widget: text }
+          - { label: Facebook 連結, name: facebook, widget: string, required: false }
+          - { label: Instagram 連結, name: instagram, widget: string, required: false }
+          - { label: YouTube 連結, name: youtube_channel, widget: string, required: false }

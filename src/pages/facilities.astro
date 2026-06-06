@@ -1,0 +1,95 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const facilities = [
+  {
+    name: '專業攝影棚',
+    desc: '400 平方公尺的多功能攝影棚，配備完整燈光系統、背景幕布及各式景片，可進行各類型影視製作。',
+    tags: ['400㎡', '專業燈光', '綠幕設備'],
+  },
+  {
+    name: '剪輯後製室',
+    desc: '20 台高規格剪輯工作站，配備 Adobe Premiere、DaVinci Resolve、After Effects 等專業軟體。',
+    tags: ['20 座工作站', 'DaVinci Resolve', '4K 剪輯'],
+  },
+  {
+    name: '錄音室',
+    desc: '隔音專業錄音室，配備高質感麥克風陣列、混音工作台，適合配音、原創音樂及環境音錄製。',
+    tags: ['專業隔音', '5.1 環繞', '配音棚'],
+  },
+  {
+    name: '器材借用中心',
+    desc: '提供 Sony、Canon、Blackmagic 等品牌攝影機，以及穩定器、滑軌、無人機等各式輔助設備。',
+    tags: ['Sony FX 系列', 'Blackmagic', '無人機'],
+  },
+  {
+    name: '放映廳',
+    desc: '100 人座位的專業放映廳，配備 4K 投影系統與 Dolby 音效，用於影片欣賞、評片課程及成果放映。',
+    tags: ['100 座', '4K 投影', 'Dolby 音效'],
+  },
+  {
+    name: '創作討論空間',
+    desc: '開放式的創作討論與交流空間，鼓勵學生之間的跨組合作與即興創作。',
+    tags: ['開放空間', '24H 使用', '合作創作'],
+  },
+];
+---
+
+<BaseLayout title="設備環境 | 影視傳播系" description="黎明技術學院影視傳播系設備與環境介紹">
+
+  <!-- Page Hero -->
+  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Facilities</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">設備環境</h1>
+    </div>
+  </section>
+
+  <!-- 說明 -->
+  <section class="py-16 px-6">
+    <div class="max-w-7xl mx-auto reveal">
+      <p class="text-film-light/60 max-w-3xl leading-relaxed text-lg">
+        業界等級的設備，讓你在學校就能體驗真實的專業製作環境。
+        我們持續更新硬體設備，確保學生接觸的是當下最前沿的影視製作工具。
+      </p>
+    </div>
+  </section>
+
+  <!-- 設備列表 -->
+  <section class="py-12 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {facilities.map((item, i) => (
+        <div class="reveal border border-white/10 hover:border-film-gold group transition-colors duration-300 p-8"
+             style={`transition-delay: ${i * 80}ms`}>
+          <h3 class="font-display text-xl text-white mb-4 group-hover:text-film-gold transition-colors">
+            {item.name}
+          </h3>
+          <p class="text-film-light/60 text-sm leading-relaxed mb-6">{item.desc}</p>
+          <div class="flex flex-wrap gap-2">
+            {item.tags.map(tag => (
+              <span class="text-xs border border-white/20 text-film-light/50 px-3 py-1 group-hover:border-film-gold/40 group-hover:text-film-gold transition-colors">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 器材清單 CTA -->
+  <section class="py-24 px-6 bg-film-gray">
+    <div class="max-w-3xl mx-auto text-center reveal">
+      <h2 class="font-display text-3xl text-white mb-6">想了解詳細器材清單？</h2>
+      <p class="text-film-light/60 mb-10 leading-relaxed">
+        歡迎聯繫系辦，或親自來系上參觀設備環境。
+        我們也定期舉辦開放參觀活動，讓有興趣就讀的同學提前體驗。
+      </p>
+      <a href="/admission" class="inline-block px-10 py-4 bg-film-gold text-film-black font-semibold text-sm tracking-widest uppercase hover:bg-white transition-colors duration-300">
+        聯絡我們
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>

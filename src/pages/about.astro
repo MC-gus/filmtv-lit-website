@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="學系簡介 | 影視傳播系" description="了解黎明技術學院影視傳播系的辦學理念與特色">
+
+  <!-- Page Hero -->
+  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">About Us</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">學系簡介</h1>
+    </div>
+  </section>
+
+  <!-- 系所理念 -->
+  <section class="py-24 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      <div class="reveal-left">
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">Our Philosophy</p>
+        <h2 class="font-display text-4xl text-white mb-8 leading-tight">
+          影像是時代的<br />見證與語言
+        </h2>
+        <p class="text-film-light/60 leading-relaxed mb-6">
+          黎明技術學院影視傳播系成立至今，始終秉持「理論與實務並重」的教育理念，
+          培育兼具人文素養與專業技能的影視傳播人才。
+        </p>
+        <p class="text-film-light/60 leading-relaxed mb-6">
+          我們相信，影像不只是技術，更是一種思考方式、一種溝通語言。
+          每一個鏡頭背後，都是創作者對世界的觀察與詮釋。
+        </p>
+        <p class="text-film-light/60 leading-relaxed">
+          在這裡，你不只學習如何操作攝影機，更學習如何用影像說出屬於你自己的故事。
+        </p>
+      </div>
+
+      <!-- 裝飾性視覺 -->
+      <div class="reveal-right relative">
+        <div class="aspect-[4/3] bg-film-gray border border-white/10 flex items-center justify-center">
+          <div class="text-center px-8">
+            <div class="font-display text-8xl text-film-gold/20 font-bold leading-none mb-4">影</div>
+            <p class="text-film-light/40 text-sm tracking-widest">FILM & TELEVISION</p>
+          </div>
+        </div>
+        <!-- 浮動框線裝飾 -->
+        <div class="absolute -top-4 -right-4 w-32 h-32 border border-film-gold/30"></div>
+        <div class="absolute -bottom-4 -left-4 w-32 h-32 border border-film-gold/30"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 教育目標 -->
+  <section class="py-24 px-6 bg-film-gray">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Educational Goals</p>
+        <h2 class="font-display text-4xl text-white">四大教育目標</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[
+          { num: '01', title: '創作力培育', desc: '激發學生的創意思維，培養獨立思考與藝術表達能力，鼓勵跨媒體的創作嘗試。' },
+          { num: '02', title: '技術專業訓練', desc: '從攝影、剪輯、收音到調色，提供完整的影視製作技術訓練，對應業界真實需求。' },
+          { num: '03', title: '人文素養深化', desc: '結合電影史、媒體理論與文化研究，培養學生對影像文化的批判性思考能力。' },
+          { num: '04', title: '產業接軌能力', desc: '透過業師課程、實習機制與產學合作，讓學生在畢業前就建立業界人脈與實戰經驗。' },
+        ].map((item, i) => (
+          <div class="reveal p-8 border border-white/10 hover:border-film-gold transition-colors duration-300 group"
+               style={`transition-delay: ${i * 100}ms`}>
+            <div class="flex items-start gap-6">
+              <span class="font-display text-4xl text-film-gold/30 font-bold leading-none group-hover:text-film-gold/60 transition-colors">
+                {item.num}
+              </span>
+              <div>
+                <h3 class="text-white font-semibold text-lg mb-3 group-hover:text-film-gold transition-colors">{item.title}</h3>
+                <p class="text-film-light/60 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 歷史沿革 -->
+  <section class="py-24 px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">History</p>
+        <h2 class="font-display text-4xl text-white">歷史沿革</h2>
+      </div>
+      <div class="relative">
+        <!-- 時間軸線 -->
+        <div class="absolute left-0 md:left-1/2 top-0 bottom-0 w-px bg-white/10 transform md:-translate-x-1/2"></div>
+        <div class="space-y-12">
+          {[
+            { year: '2000', event: '影視傳播系正式創系', desc: '黎明技術學院設立影視傳播系，開始招收第一屆學生。' },
+            { year: '2005', event: '設備全面升級', desc: '引進高清攝影設備，建立專業攝影棚，開啟數位影像教學新紀元。' },
+            { year: '2010', event: '產學合作深化', desc: '與電視台、廣告公司簽訂合作備忘錄，建立完整實習機制。' },
+            { year: '2018', event: '新媒體課程導入', desc: '因應短影音與串流平台趨勢，新增新媒體製作、直播技術等課程。' },
+            { year: '2024', event: '影視傳播系持續進化', desc: 'AI 輔助製作、虛擬製片技術納入課程，培育符合未來需求的影視人才。' },
+          ].map((item, i) => (
+            <div class={`reveal relative flex flex-col md:flex-row gap-8 ${i % 2 === 0 ? 'md:pr-1/2' : 'md:pl-1/2 md:flex-row-reverse'}`}>
+              <div class={`md:w-1/2 ${i % 2 === 0 ? 'md:text-right md:pr-12' : 'md:text-left md:pl-12'}`}>
+                <div class="text-film-gold font-display text-2xl font-bold mb-2">{item.year}</div>
+                <h3 class="text-white font-semibold mb-2">{item.event}</h3>
+                <p class="text-film-light/60 text-sm leading-relaxed">{item.desc}</p>
+              </div>
+              <!-- 時間點 -->
+              <div class="hidden md:block absolute left-1/2 top-2 w-3 h-3 bg-film-gold rounded-full transform -translate-x-1/2 border-2 border-film-black"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

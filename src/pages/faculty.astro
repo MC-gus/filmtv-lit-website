@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faculty = [
+  {
+    name: '王大明',
+    title: '系主任 / 副教授',
+    specialty: '劇情片導演、劇本創作',
+    bio: '曾任職於公共電視、三立電視，擁有超過 20 年影視製作經驗，執導多部獲獎短片與紀錄片。',
+  },
+  {
+    name: '李雅婷',
+    title: '副教授',
+    specialty: '攝影美學、影像構圖',
+    bio: '金馬獎最佳攝影入圍者，曾擔任多部院線電影攝影師，現致力於培育下一代影像工作者。',
+  },
+  {
+    name: '陳俊宏',
+    title: '助理教授',
+    specialty: '後期製作、調色技術',
+    bio: '具備好萊塢影視後製經驗，專精數位調色與特效合成，作品遍及台灣、美國、日本。',
+  },
+  {
+    name: '林淑芬',
+    title: '助理教授',
+    specialty: '紀錄片製作、田野調查',
+    bio: '獨立紀錄片導演，作品多次入圍台灣國際紀錄片影展，長期關注社會議題與人文關懷。',
+  },
+  {
+    name: '張建國',
+    title: '講師',
+    specialty: '聲音設計、錄音技術',
+    bio: '金鐘獎最佳音效獎得主，擁有豐富的電視劇與廣告聲音製作經驗。',
+  },
+  {
+    name: '吳美玲',
+    title: '講師',
+    specialty: '行銷傳播、新媒體內容',
+    bio: '前廣告公司創意總監，專注於品牌影像溝通與社群媒體內容策略。',
+  },
+];
+---
+
+<BaseLayout title="師資陣容 | 影視傳播系" description="黎明技術學院影視傳播系師資介紹">
+
+  <!-- Page Hero -->
+  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Our Faculty</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">師資陣容</h1>
+    </div>
+  </section>
+
+  <!-- 師資介紹 -->
+  <section class="py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-16 reveal">
+        <p class="text-film-light/60 max-w-2xl leading-relaxed">
+          我們的師資團隊由業界實戰出身的專業人士組成，每一位老師不只是教學者，
+          更是持續在產業中創作的影像工作者。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {faculty.map((person, i) => (
+          <div class="reveal group border border-white/10 hover:border-film-gold transition-all duration-300 p-8"
+               style={`transition-delay: ${i * 80}ms`}>
+            <!-- 頭像佔位 -->
+            <div class="w-20 h-20 bg-film-gray border border-white/20 mb-6 flex items-center justify-center group-hover:border-film-gold transition-colors">
+              <span class="font-display text-2xl text-film-gold/40 group-hover:text-film-gold transition-colors">
+                {person.name[0]}
+              </span>
+            </div>
+
+            <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-film-gold transition-colors">
+              {person.name}
+            </h3>
+            <p class="text-film-gold text-xs tracking-wide mb-1">{person.title}</p>
+            <p class="text-film-light/40 text-xs mb-4 border-b border-white/10 pb-4">專長：{person.specialty}</p>
+            <p class="text-film-light/60 text-sm leading-relaxed">{person.bio}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 業師講座 -->
+  <section class="py-24 px-6 bg-film-gray">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="reveal-left">
+          <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Industry Mentors</p>
+          <h2 class="font-display text-4xl text-white mb-8">業師講座制度</h2>
+          <p class="text-film-light/60 leading-relaxed mb-6">
+            除了專任師資，我們每學期定期邀請業界資深工作者擔任業師，
+            帶來最新的產業動態與真實的工作經驗分享。
+          </p>
+          <p class="text-film-light/60 leading-relaxed">
+            過去合作的業師來自電視台導演、電影攝影師、廣告製片、
+            新媒體創作者等各領域，讓學生直接接觸業界第一線。
+          </p>
+        </div>
+        <div class="reveal-right grid grid-cols-2 gap-4">
+          {['導演', '攝影師', '剪輯師', '製片人', '聲音設計', '新媒體創作者'].map(role => (
+            <div class="border border-white/10 hover:border-film-gold p-4 text-center transition-colors">
+              <p class="text-film-light/60 text-sm">{role}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

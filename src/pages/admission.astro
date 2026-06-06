@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const channels = [
+  {
+    title: '個人申請',
+    period: '每年 2 - 4 月',
+    desc: '透過學測成績申請，需參加指定科目學科能力測驗，並通過系所甄選面試。',
+    steps: ['報名繳費', '資料審查', '面試甄選', '放榜錄取'],
+  },
+  {
+    title: '繁星推薦',
+    period: '每年 1 - 3 月',
+    desc: '由高中職學校推薦成績優異學生，透過學校名額分配參與篩選。',
+    steps: ['學校推薦', '成績審查', '系所比序', '放榜錄取'],
+  },
+  {
+    title: '考試分發',
+    period: '每年 7 月',
+    desc: '以指定科目考試（指考）成績分發，按照志願序與成績錄取。',
+    steps: ['參加指考', '填寫志願', '統一分發', '放榜入學'],
+  },
+  {
+    title: '四技二專統測',
+    period: '每年 5 - 7 月',
+    desc: '以統一入學測驗成績申請，適合高職/綜高學生，歡迎傳播相關科別同學報考。',
+    steps: ['參加統測', '選填志願', '分發錄取', '報到入學'],
+  },
+];
+
+const faqs = [
+  {
+    q: '需要有相關背景才能報考嗎？',
+    a: '不需要！我們歡迎所有對影視傳播有熱情的學生，不論是否有拍攝經驗，只要對影像創作有興趣即可。',
+  },
+  {
+    q: '面試時需要準備什麼？',
+    a: '建議準備個人作品（不限形式：照片、短片、文字等皆可），以及清楚說明為什麼想念影視傳播系。',
+  },
+  {
+    q: '畢業後出路如何？',
+    a: '畢業生廣泛任職於電視台、廣告公司、影視製作公司、新媒體公司，也有許多校友自行創業。',
+  },
+  {
+    q: '有沒有獎學金制度？',
+    a: '學校提供多種獎學金，包括學業獎學金、清寒獎助學金，以及本系設立的影視創作獎學金。',
+  },
+];
+---
+
+<BaseLayout title="招生資訊 | 影視傳播系" description="黎明技術學院影視傳播系招生管道與入學資訊">
+
+  <!-- Page Hero -->
+  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Admission</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">招生資訊</h1>
+    </div>
+  </section>
+
+  <!-- 招生管道 -->
+  <section class="py-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="mb-16 reveal">
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">How to Apply</p>
+        <h2 class="font-display text-4xl text-white mb-6">入學管道</h2>
+        <p class="text-film-light/60 max-w-2xl leading-relaxed">
+          我們提供多元入學管道，讓不同背景的學生都有機會加入影視傳播系。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {channels.map((channel, i) => (
+          <div class="reveal border border-white/10 hover:border-film-gold group transition-colors duration-300 p-8"
+               style={`transition-delay: ${i * 100}ms`}>
+            <div class="flex items-start justify-between mb-6">
+              <h3 class="font-display text-xl text-white group-hover:text-film-gold transition-colors">{channel.title}</h3>
+              <span class="text-xs border border-film-gold/40 text-film-gold px-3 py-1 shrink-0 ml-4">{channel.period}</span>
+            </div>
+            <p class="text-film-light/60 text-sm leading-relaxed mb-6">{channel.desc}</p>
+            <!-- 流程 -->
+            <div class="flex items-center gap-2 flex-wrap">
+              {channel.steps.map((step, si) => (
+                <>
+                  <span class="text-xs text-film-light/60 bg-white/5 px-3 py-1">{step}</span>
+                  {si < channel.steps.length - 1 && (
+                    <span class="text-film-gold/40 text-xs">→</span>
+                  )}
+                </>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 常見問題 -->
+  <section class="py-24 px-6 bg-film-gray">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">FAQ</p>
+        <h2 class="font-display text-4xl text-white">常見問題</h2>
+      </div>
+      <div class="space-y-4">
+        {faqs.map((faq, i) => (
+          <div class="reveal border border-white/10 hover:border-film-gold/50 transition-colors p-8"
+               style={`transition-delay: ${i * 80}ms`}>
+            <h3 class="text-white font-semibold mb-3 flex items-start gap-3">
+              <span class="text-film-gold shrink-0">Q</span>
+              {faq.q}
+            </h3>
+            <p class="text-film-light/60 text-sm leading-relaxed pl-6">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 聯絡系辦 -->
+  <section class="py-24 px-6">
+    <div class="max-w-3xl mx-auto text-center reveal">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">Contact Us</p>
+      <h2 class="font-display text-4xl text-white mb-8">有任何問題？<br />歡迎直接聯絡我們</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 text-left">
+        {[
+          { label: '地址', value: '新北市泰山區黎明里黎專路一號' },
+          { label: '電話', value: '02-2908-XXXX' },
+          { label: 'Email', value: 'filmtv@lit.edu.tw' },
+        ].map(item => (
+          <div class="border border-white/10 p-6">
+            <p class="text-film-gold text-xs tracking-widest uppercase mb-2">{item.label}</p>
+            <p class="text-white text-sm">{item.value}</p>
+          </div>
+        ))}
+      </div>
+      <a href="mailto:filmtv@lit.edu.tw"
+        class="inline-block px-12 py-5 bg-film-gold text-film-black font-semibold text-sm tracking-widest uppercase hover:bg-white transition-colors duration-300">
+        寄信給我們
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>

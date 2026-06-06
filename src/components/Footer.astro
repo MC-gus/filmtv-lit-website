@@ -1,0 +1,49 @@
+---
+---
+<footer class="bg-film-dark border-t border-white/10 py-16">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+    <!-- 系所資訊 -->
+    <div>
+      <h3 class="font-display text-film-gold text-lg mb-4">黎明技術學院 影視傳播系</h3>
+      <p class="text-film-light/60 text-sm leading-relaxed">
+        新北市泰山區黎明里黎專路一號<br />
+        Department of Film & Television
+      </p>
+    </div>
+
+    <!-- 快速連結 -->
+    <div>
+      <h3 class="text-white font-semibold mb-4 text-sm tracking-widest uppercase">快速連結</h3>
+      <ul class="space-y-2">
+        {[
+          { href: '/about', label: '學系簡介' },
+          { href: '/faculty', label: '師資陣容' },
+          { href: '/admission', label: '招生資訊' },
+          { href: '/works', label: '作品預告' },
+        ].map(link => (
+          <li>
+            <a href={link.href} class="text-film-light/60 hover:text-film-gold text-sm transition-colors">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- 社群媒體 -->
+    <div>
+      <h3 class="text-white font-semibold mb-4 text-sm tracking-widest uppercase">關注我們</h3>
+      <div class="flex gap-4">
+        <a href="#" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">Facebook</a>
+        <a href="#" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">Instagram</a>
+        <a href="#" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">YouTube</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/10">
+    <p class="text-film-light/40 text-xs text-center">
+      © {new Date().getFullYear()} 黎明技術學院 影視傳播系. All rights reserved.
+    </p>
+  </div>
+</footer>

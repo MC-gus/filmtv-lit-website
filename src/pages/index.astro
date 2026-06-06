@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="黎明技術學院 影視傳播系" description="培育影視傳播專業人才，連結創作與產業的橋樑。">
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+    <!-- 背景影片（先用漸層佔位，之後換成真實影片） -->
+    <div class="absolute inset-0 bg-gradient-to-br from-film-black via-film-gray to-film-black">
+      <!-- 替換成影片時取消下方註解 -->
+      <!--
+      <video
+        autoplay muted loop playsinline
+        class="absolute inset-0 w-full h-full object-cover opacity-50"
+        src="/videos/hero.mp4"
+      ></video>
+      -->
+      <!-- 底部漸層遮罩 -->
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-film-black"></div>
+      <!-- 紋路效果 -->
+      <div class="absolute inset-0 opacity-5"
+        style="background-image: url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;4&quot; height=&quot;4&quot;><rect width=&quot;1&quot; height=&quot;1&quot; fill=&quot;white&quot;/></svg>')">
+      </div>
+    </div>
+
+    <!-- Hero 內容 -->
+    <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+      <p id="hero-sub" class="text-film-gold text-sm tracking-[0.4em] uppercase mb-6 opacity-0">
+        Lee-Ming Institute of Technology
+      </p>
+      <h1 id="hero-title" class="font-display text-6xl md:text-8xl lg:text-9xl font-bold text-white leading-none mb-8 opacity-0">
+        影視傳播系
+      </h1>
+      <p id="hero-desc" class="text-film-light/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12 opacity-0">
+        用鏡頭說故事，以影像探索世界<br />
+        培育下一代影視創作者
+      </p>
+      <div id="hero-cta" class="flex flex-col sm:flex-row gap-4 justify-center opacity-0">
+        <a href="/about"
+          class="px-8 py-4 bg-film-gold text-film-black font-semibold text-sm tracking-widest uppercase hover:bg-white transition-colors duration-300">
+          了解學系
+        </a>
+        <a href="/admission"
+          class="px-8 py-4 border border-white/40 text-white text-sm tracking-widest uppercase hover:border-film-gold hover:text-film-gold transition-colors duration-300">
+          招生資訊
+        </a>
+      </div>
+    </div>
+
+    <!-- 滾動提示 -->
+    <div id="scroll-hint" class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0">
+      <span class="text-film-light/40 text-xs tracking-widest">SCROLL</span>
+      <div class="w-px h-12 bg-gradient-to-b from-film-gold to-transparent animate-pulse"></div>
+    </div>
+  </section>
+
+  <!-- ===== 關於系所 ===== -->
+  <section class="py-32 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div class="reveal-left">
+          <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">About Us</p>
+          <h2 class="font-display text-4xl md:text-5xl text-white leading-tight mb-8">
+            電影是說故事<br />最有力的語言
+          </h2>
+          <p class="text-film-light/60 leading-relaxed mb-6">
+            黎明技術學院影視傳播系致力於培育兼具理論素養與實務能力的影視傳播專業人才。
+            從劇本創作、導演技術、攝影美學到後期製作，我們提供完整的影像創作教育。
+          </p>
+          <p class="text-film-light/60 leading-relaxed mb-10">
+            我們相信每一個學生都有屬於自己的故事，而我們的使命就是給你說故事的能力與舞台。
+          </p>
+          <a href="/about" class="inline-flex items-center gap-3 text-film-gold text-sm tracking-widest uppercase hover:gap-6 transition-all duration-300">
+            深入了解
+            <span class="w-8 h-px bg-film-gold"></span>
+          </a>
+        </div>
+
+        <!-- 數字亮點 -->
+        <div class="reveal-right grid grid-cols-2 gap-6">
+          {[
+            { num: '20+', label: '年辦學歷史' },
+            { num: '100%', label: '專業設備覆蓋' },
+            { num: '50+', label: '業界合作夥伴' },
+            { num: '1000+', label: '校友遍布各地' },
+          ].map(item => (
+            <div class="border border-white/10 p-8 hover:border-film-gold transition-colors duration-300">
+              <div class="font-display text-4xl text-film-gold font-bold mb-2">{item.num}</div>
+              <div class="text-film-light/60 text-sm">{item.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 三大特色 ===== -->
+  <section class="py-32 px-6 bg-film-gray">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">What We Offer</p>
+        <h2 class="font-display text-4xl md:text-5xl text-white">三大學習優勢</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            icon: '🎬',
+            title: '專業設備',
+            desc: '配備業界級攝影機、錄音室、剪輯室及專業攝影棚，讓你在學校就能接觸真實的業界環境。',
+          },
+          {
+            icon: '🎞️',
+            title: '實戰課程',
+            desc: '從一年級開始就動手拍，課程設計結合理論與實務，每學期都有真實作品產出。',
+          },
+          {
+            icon: '🤝',
+            title: '產業連結',
+            desc: '與電視台、廣告公司、電影公司等超過 50 家業界夥伴合作，提供實習與就業管道。',
+          },
+        ].map((item, i) => (
+          <div class={`reveal p-10 border border-white/10 hover:border-film-gold group transition-colors duration-300`}
+               style={`transition-delay: ${i * 150}ms`}>
+            <div class="text-4xl mb-6">{item.icon}</div>
+            <h3 class="font-display text-xl text-white mb-4 group-hover:text-film-gold transition-colors">{item.title}</h3>
+            <p class="text-film-light/60 text-sm leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 最新消息 ===== -->
+  <section class="py-32 px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-end justify-between mb-16 reveal">
+        <div>
+          <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Latest News</p>
+          <h2 class="font-display text-4xl text-white">最新消息</h2>
+        </div>
+        <a href="/news" class="hidden md:inline-flex items-center gap-3 text-film-gold text-sm tracking-widest uppercase hover:gap-6 transition-all duration-300">
+          查看全部
+          <span class="w-8 h-px bg-film-gold"></span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            date: '2024.06',
+            category: '得獎消息',
+            title: '影視傳播系學生榮獲全國短片競賽最佳導演獎',
+            desc: '恭喜三年級林同學以短片作品《晨光》獲得本屆全國學生影像競賽最佳導演殊榮。',
+          },
+          {
+            date: '2024.05',
+            category: '產學合作',
+            title: '黎明 × 亞洲衛星電視 青年劇展計畫開放報名',
+            desc: '2024 年度短片創投輔導金計畫正式開放報名，大二以上學生均可申請。',
+          },
+          {
+            date: '2024.04',
+            category: '校園活動',
+            title: '畢業製作成果展 6 月盛大登場',
+            desc: '本屆畢業製作成果展將於六月中旬舉行，歡迎各界蒞臨指導。',
+          },
+        ].map((news, i) => (
+          <article class={`reveal group cursor-pointer`} style={`transition-delay: ${i * 100}ms`}>
+            <div class="border border-white/10 group-hover:border-film-gold transition-colors duration-300 p-8 h-full flex flex-col">
+              <div class="flex items-center justify-between mb-6">
+                <span class="text-film-gold text-xs tracking-widest">{news.date}</span>
+                <span class="text-film-light/40 text-xs border border-white/20 px-3 py-1">{news.category}</span>
+              </div>
+              <h3 class="text-white font-semibold leading-snug mb-4 group-hover:text-film-gold transition-colors">
+                {news.title}
+              </h3>
+              <p class="text-film-light/50 text-sm leading-relaxed flex-grow">{news.desc}</p>
+              <div class="mt-6 text-film-gold text-xs tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                閱讀更多 →
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 招生 CTA ===== -->
+  <section class="py-40 px-6 bg-film-gray relative overflow-hidden">
+    <div class="absolute inset-0 opacity-5">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-film-gold"></div>
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-film-gold"></div>
+    </div>
+    <div class="relative z-10 max-w-3xl mx-auto text-center reveal">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">Join Us</p>
+      <h2 class="font-display text-4xl md:text-6xl text-white mb-8 leading-tight">
+        準備好成為<br />下一位創作者了嗎？
+      </h2>
+      <p class="text-film-light/60 text-lg mb-12 leading-relaxed">
+        無論你對導演、攝影、剪輯還是幕後製作感興趣，<br />
+        影視傳播系都有你的位置。
+      </p>
+      <a href="/admission"
+        class="inline-block px-12 py-5 bg-film-gold text-film-black font-semibold text-sm tracking-widest uppercase hover:bg-white transition-colors duration-300">
+        立即了解招生資訊
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<script>
+  import { gsap } from 'gsap';
+
+  // Hero 進場動畫
+  const tl = gsap.timeline({ delay: 0.3 });
+  tl.to('#hero-sub', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+    .to('#hero-title', { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }, '-=0.4')
+    .to('#hero-desc', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
+    .to('#hero-cta', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4')
+    .to('#scroll-hint', { opacity: 1, duration: 1 }, '-=0.2');
+
+  // Hero 初始位置
+  gsap.set('#hero-sub', { y: 30 });
+  gsap.set('#hero-title', { y: 50 });
+  gsap.set('#hero-desc', { y: 30 });
+  gsap.set('#hero-cta', { y: 30 });
+</script>

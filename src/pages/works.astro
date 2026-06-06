@@ -1,0 +1,113 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// 之後可以從 CMS 讀取，現在先用假資料示範
+const works = [
+  {
+    title: '晨光',
+    year: '2024',
+    type: '短片',
+    desc: '110 學年度最佳短片獎。一個關於記憶與遺忘的溫柔故事。',
+    youtube: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    award: '全國學生影像競賽 最佳導演',
+  },
+  {
+    title: '候鳥',
+    year: '2024',
+    type: '紀錄片',
+    desc: '記錄新北市一群移工的日常生活，探索身分認同與異鄉情感。',
+    youtube: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    award: '台灣國際紀錄片影展 入圍',
+  },
+  {
+    title: '聲景',
+    year: '2023',
+    type: '實驗影像',
+    desc: '以聲音為主體，重新探索台北城市中被忽略的聲音風景。',
+    youtube: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    award: null,
+  },
+  {
+    title: '黎明 × 亞衛 青年劇展',
+    year: '2023',
+    type: '短片',
+    desc: '與亞洲衛星電視合作的年度劇展精選作品合輯預告。',
+    youtube: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    award: '亞洲衛星電視播出',
+  },
+];
+---
+
+<BaseLayout title="作品預告 | 影視傳播系" description="黎明技術學院影視傳播系學生作品精選">
+
+  <!-- Page Hero -->
+  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Student Works</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">作品預告</h1>
+    </div>
+  </section>
+
+  <!-- 說明文字 -->
+  <section class="py-16 px-6">
+    <div class="max-w-7xl mx-auto reveal">
+      <p class="text-film-light/60 max-w-2xl leading-relaxed text-lg">
+        這裡展示學生的創作成果與精選預告，從短片、紀錄片到實驗影像，
+        每一個作品都是學生對世界的獨特詮釋。
+      </p>
+    </div>
+  </section>
+
+  <!-- 作品列表 -->
+  <section class="py-12 px-6">
+    <div class="max-w-7xl mx-auto space-y-16">
+      {works.map((work, i) => (
+        <div class={`reveal grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
+          <!-- 影片 -->
+          <div class={`${i % 2 === 1 ? 'lg:col-start-2' : ''}`}>
+            <div class="aspect-video bg-film-gray border border-white/10 overflow-hidden">
+              <iframe
+                src={work.youtube}
+                title={work.title}
+                class="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+          <!-- 資訊 -->
+          <div class={`${i % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}`}>
+            <div class="flex items-center gap-4 mb-4">
+              <span class="text-xs border border-film-gold/50 text-film-gold px-3 py-1">{work.type}</span>
+              <span class="text-film-light/40 text-xs">{work.year}</span>
+            </div>
+            <h2 class="font-display text-3xl text-white font-bold mb-4">{work.title}</h2>
+            <p class="text-film-light/60 leading-relaxed mb-6">{work.desc}</p>
+            {work.award && (
+              <div class="flex items-center gap-3 text-film-gold text-sm">
+                <span>🏆</span>
+                <span>{work.award}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-24 px-6 bg-film-gray">
+    <div class="max-w-3xl mx-auto text-center reveal">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">More Works</p>
+      <h2 class="font-display text-3xl text-white mb-6">更多作品陸續上線</h2>
+      <p class="text-film-light/60 mb-10">
+        關注我們的 YouTube 頻道，第一時間掌握最新學生作品。
+      </p>
+      <a href="#" class="inline-block px-10 py-4 border border-film-gold text-film-gold text-sm tracking-widest uppercase hover:bg-film-gold hover:text-film-black transition-colors duration-300">
+        前往 YouTube 頻道
+      </a>
+    </div>
+  </section>
+
+</BaseLayout>
