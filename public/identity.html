@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>帳號設定 | 影視傳播系</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #f0ede8;
+      font-family: sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      flex-direction: column;
+      gap: 16px;
+    }
+    p { color: #888; font-size: 14px; }
+    button {
+      background: #c9a84c;
+      color: #000;
+      border: none;
+      padding: 12px 32px;
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <p>影視傳播系後台</p>
+  <button onclick="window.netlifyIdentity.open()">開啟帳號設定</button>
+  <script>
+    window.netlifyIdentity.on('login', function() {
+      window.location.href = '/admin/';
+    });
+    // 自動開啟
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        window.netlifyIdentity.open();
+      }, 500);
+    });
+  </script>
+</body>
+</html>
