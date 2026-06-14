@@ -8,9 +8,13 @@ public_folder: /images/uploads
 locale: zh_Hant
 
 collections:
-  # 最新消息
+
+  # ────────────────────────────────────────
+  # 動態內容（新增 / 刪除）
+  # ────────────────────────────────────────
+
   - name: news
-    label: 最新消息
+    label: 📰 最新消息
     folder: src/content/news
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
@@ -21,9 +25,8 @@ collections:
       - { label: 摘要, name: summary, widget: text }
       - { label: 內文, name: body, widget: markdown }
 
-  # 師資陣容
   - name: faculty
-    label: 師資陣容
+    label: 👨‍🏫 師資資料
     folder: src/content/faculty
     create: true
     fields:
@@ -34,31 +37,165 @@ collections:
       - { label: 簡介, name: bio, widget: text }
       - { label: 排序, name: order, widget: number, default: 99 }
 
-  # 作品預告
   - name: works
-    label: 作品預告
+    label: 🎬 作品預告
     folder: src/content/works
     create: true
     fields:
       - { label: 作品名稱, name: title, widget: string }
       - { label: 年份, name: year, widget: string }
-      - { label: YouTube 連結, name: youtube, widget: string, required: false }
+      - { label: YouTube 嵌入網址, name: youtube, widget: string, required: false, hint: "請使用 embed 格式，例如：https://www.youtube.com/embed/xxxxx" }
       - { label: 封面圖片, name: cover, widget: image, required: false }
       - { label: 作品描述, name: description, widget: text }
-      - { label: 類型, name: type, widget: select, options: [短片, 紀錄片, 廣告, 音樂錄影帶, 畢業製作] }
+      - { label: 得獎紀錄, name: award, widget: string, required: false }
+      - { label: 類型, name: type, widget: select, options: [短片, 紀錄片, 廣告, 音樂錄影帶, 畢業製作, 實驗影像] }
 
-  # 網站設定（首頁可編輯內容）
-  - name: settings
-    label: 網站設定
+  # ────────────────────────────────────────
+  # 頁面內容編輯
+  # ────────────────────────────────────────
+
+  - name: pages
+    label: 📄 頁面內容
     files:
-      - label: 首頁設定
+
+      - label: 🏠 首頁
         name: home
         file: src/content/settings/home.json
         fields:
-          - { label: Hero 標語（第一行）, name: hero_line1, widget: string, default: 用鏡頭說故事，以影像探索世界 }
-          - { label: Hero 標語（第二行）, name: hero_line2, widget: string, default: 培育下一代影視創作者 }
-          - { label: 系所介紹（第一段）, name: about_p1, widget: text }
-          - { label: 系所介紹（第二段）, name: about_p2, widget: text }
+          - { label: Hero 標語第一行, name: hero_line1, widget: string }
+          - { label: Hero 標語第二行, name: hero_line2, widget: string }
+          - label: 關於系所 第一段
+            name: about_p1
+            widget: text
+          - label: 關於系所 第二段
+            name: about_p2
+            widget: text
           - { label: Facebook 連結, name: facebook, widget: string, required: false }
           - { label: Instagram 連結, name: instagram, widget: string, required: false }
-          - { label: YouTube 連結, name: youtube_channel, widget: string, required: false }
+          - { label: YouTube 頻道連結, name: youtube_channel, widget: string, required: false }
+
+      - label: 📖 學系簡介
+        name: about
+        file: src/content/settings/about.json
+        fields:
+          - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
+          - { label: 頁面標題, name: hero_title, widget: string }
+          - { label: 理念區塊英文標題, name: philosophy_subtitle, widget: string }
+          - { label: 理念標題, name: philosophy_title, widget: string }
+          - { label: 理念說明第一段, name: philosophy_p1, widget: text }
+          - { label: 理念說明第二段, name: philosophy_p2, widget: text }
+          - { label: 理念說明第三段, name: philosophy_p3, widget: text }
+          - { label: 教育目標英文副標題, name: goals_subtitle, widget: string }
+          - { label: 教育目標標題, name: goals_title, widget: string }
+          - label: 教育目標（四項）
+            name: goals
+            widget: list
+            fields:
+              - { label: 編號, name: num, widget: string }
+              - { label: 標題, name: title, widget: string }
+              - { label: 說明, name: desc, widget: text }
+          - { label: 歷史沿革英文副標題, name: history_subtitle, widget: string }
+          - { label: 歷史沿革標題, name: history_title, widget: string }
+          - label: 歷史沿革（各年份）
+            name: history
+            widget: list
+            fields:
+              - { label: 年份, name: year, widget: string }
+              - { label: 事件名稱, name: event, widget: string }
+              - { label: 說明, name: desc, widget: text }
+
+      - label: 👨‍🏫 師資頁面文字
+        name: faculty_page
+        file: src/content/settings/faculty.json
+        fields:
+          - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
+          - { label: 頁面標題, name: hero_title, widget: string }
+          - { label: 師資介紹文字, name: intro, widget: text }
+          - { label: 業師區塊英文副標題, name: mentors_subtitle, widget: string }
+          - { label: 業師區塊標題, name: mentors_title, widget: string }
+          - { label: 業師說明第一段, name: mentors_p1, widget: text }
+          - { label: 業師說明第二段, name: mentors_p2, widget: text }
+          - label: 業師專業領域標籤
+            name: mentor_roles
+            widget: list
+            field: { label: 領域, name: role, widget: string }
+
+      - label: 📚 課程規劃
+        name: curriculum
+        file: src/content/settings/curriculum.json
+        fields:
+          - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
+          - { label: 頁面標題, name: hero_title, widget: string }
+          - { label: 課程介紹說明, name: intro, widget: text }
+          - label: 四年課程
+            name: years
+            widget: list
+            fields:
+              - { label: 年級（中文）, name: year, widget: string }
+              - { label: 年級（英文）, name: en, widget: string }
+              - { label: 主題, name: theme, widget: string }
+              - label: 課程列表
+                name: courses
+                widget: list
+                field: { label: 課程名稱, name: course, widget: string }
+          - { label: 特色項目英文副標題, name: features_subtitle, widget: string }
+          - { label: 特色項目標題, name: features_title, widget: string }
+          - label: 特色項目
+            name: features
+            widget: list
+            fields:
+              - { label: 圖示 Emoji, name: icon, widget: string }
+              - { label: 標題, name: title, widget: string }
+              - { label: 說明, name: desc, widget: text }
+
+      - label: 🏢 設備環境
+        name: facilities
+        file: src/content/settings/facilities.json
+        fields:
+          - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
+          - { label: 頁面標題, name: hero_title, widget: string }
+          - { label: 頁面說明, name: intro, widget: text }
+          - label: 設備項目
+            name: facilities
+            widget: list
+            fields:
+              - { label: 設備名稱, name: name, widget: string }
+              - { label: 說明, name: desc, widget: text }
+              - label: 標籤
+                name: tags
+                widget: list
+                field: { label: 標籤, name: tag, widget: string }
+          - { label: 底部 CTA 標題, name: cta_title, widget: string }
+          - { label: 底部 CTA 說明, name: cta_desc, widget: text }
+
+      - label: 📋 招生資訊
+        name: admission
+        file: src/content/settings/admission.json
+        fields:
+          - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
+          - { label: 頁面標題, name: hero_title, widget: string }
+          - { label: 招生說明, name: intro, widget: text }
+          - label: 入學管道
+            name: channels
+            widget: list
+            fields:
+              - { label: 管道名稱, name: title, widget: string }
+              - { label: 時間, name: period, widget: string }
+              - { label: 說明, name: desc, widget: text }
+              - label: 流程步驟
+                name: steps
+                widget: list
+                field: { label: 步驟, name: step, widget: string }
+          - { label: FAQ 英文副標題, name: faq_subtitle, widget: string }
+          - { label: FAQ 標題, name: faq_title, widget: string }
+          - label: 常見問題
+            name: faqs
+            widget: list
+            fields:
+              - { label: 問題, name: q, widget: string }
+              - { label: 回答, name: a, widget: text }
+          - { label: 聯絡區塊英文副標題, name: contact_subtitle, widget: string }
+          - { label: 聯絡區塊標題, name: contact_title, widget: string }
+          - { label: 地址, name: address, widget: string }
+          - { label: 電話, name: phone, widget: string }
+          - { label: Email, name: email, widget: string }

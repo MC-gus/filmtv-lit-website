@@ -1,89 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const years = [
-  {
-    year: '一年級',
-    en: 'Year 1',
-    theme: '基礎奠定',
-    courses: [
-      '影視概論', '電影史', '攝影基礎', '劇本寫作入門',
-      '數位影像基礎', '聲音概論', '媒體素養', '影像美學',
-    ],
-  },
-  {
-    year: '二年級',
-    en: 'Year 2',
-    theme: '技術深化',
-    courses: [
-      '劇情短片製作', '紀錄片概論', '攝影進階', '剪輯技術',
-      '聲音設計', '燈光技術', '電視節目製作', '行銷傳播',
-    ],
-  },
-  {
-    year: '三年級',
-    en: 'Year 3',
-    theme: '實戰應用',
-    courses: [
-      '導演技法', '獨立製片', '後期製作整合', '調色技術',
-      '廣告影片製作', '新媒體內容創作', '業師講座', '實習課程',
-    ],
-  },
-  {
-    year: '四年級',
-    en: 'Year 4',
-    theme: '創作展現',
-    courses: [
-      '畢業製作（上）', '畢業製作（下）', '影展策劃', '專題研究',
-      '產業實習', '作品集製作', '職涯規劃', '影視產業法規',
-    ],
-  },
-];
-
-const features = [
-  { icon: '🎬', title: '畢業製作', desc: '四年級獨立完成一部完整影視作品，從企劃、拍攝到後製全程自主。' },
-  { icon: '🏢', title: '業界實習', desc: '與 50+ 家業界夥伴合作，提供電視台、廣告公司、製作公司等實習名額。' },
-  { icon: '🏆', title: '競賽參與', desc: '積極鼓勵學生參加國內外影展與競賽，提升作品能見度與業界曝光。' },
-];
+import data from '../content/settings/curriculum.json';
 ---
 
-<BaseLayout title="課程規劃 | 影視傳播系" description="黎明技術學院影視傳播系四年課程規劃">
+<BaseLayout title={`${data.hero_title} | 影視傳播系`}>
 
-  <!-- Page Hero -->
   <section class="pt-40 pb-20 px-6 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
     <div class="relative z-10 max-w-7xl mx-auto">
-      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Curriculum</p>
-      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">課程規劃</h1>
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.hero_subtitle}</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">{data.hero_title}</h1>
     </div>
   </section>
 
-  <!-- 課程說明 -->
   <section class="py-16 px-6">
     <div class="max-w-7xl mx-auto reveal">
-      <p class="text-film-light/60 max-w-3xl leading-relaxed text-lg">
-        從基礎理論到實戰創作，四年的課程設計循序漸進，
-        讓學生在畢業時具備完整的影視製作能力，並能直接接軌業界。
-      </p>
+      <p class="text-film-light/60 max-w-3xl leading-relaxed text-lg">{data.intro}</p>
     </div>
   </section>
 
-  <!-- 四年課程 -->
   <section class="py-12 px-6">
     <div class="max-w-7xl mx-auto space-y-6">
-      {years.map((year, i) => (
+      {data.years.map((year, i) => (
         <div class="reveal border border-white/10 hover:border-film-gold/50 transition-colors duration-300"
              style={`transition-delay: ${i * 100}ms`}>
           <div class="grid grid-cols-1 md:grid-cols-4">
-            <!-- 年級標題 -->
             <div class="bg-film-gray p-8 flex flex-col justify-center border-b md:border-b-0 md:border-r border-white/10">
               <p class="text-film-gold text-xs tracking-widest uppercase mb-1">{year.en}</p>
               <h3 class="font-display text-3xl text-white font-bold mb-2">{year.year}</h3>
-              <span class="inline-block text-xs border border-film-gold/40 text-film-gold px-3 py-1 w-fit">
-                {year.theme}
-              </span>
+              <span class="inline-block text-xs border border-film-gold/40 text-film-gold px-3 py-1 w-fit">{year.theme}</span>
             </div>
-            <!-- 課程列表 -->
             <div class="md:col-span-3 p-8">
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {year.courses.map(course => (
@@ -99,15 +45,14 @@ const features = [
     </div>
   </section>
 
-  <!-- 特色課程 -->
   <section class="py-24 px-6 bg-film-gray">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16 reveal">
-        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Special Programs</p>
-        <h2 class="font-display text-4xl text-white">特色學習項目</h2>
+        <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.features_subtitle}</p>
+        <h2 class="font-display text-4xl text-white">{data.features_title}</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {features.map((item, i) => (
+        {data.features.map((item, i) => (
           <div class="reveal p-10 border border-white/10 hover:border-film-gold group transition-colors"
                style={`transition-delay: ${i * 150}ms`}>
             <div class="text-5xl mb-6">{item.icon}</div>
