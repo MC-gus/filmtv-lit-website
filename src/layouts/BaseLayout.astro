@@ -32,17 +32,26 @@ const {
     </main>
     <Footer />
 
-    <!-- Netlify Identity：登入後導向後台 -->
+    <!-- Netlify Identity：處理邀請/密碼重設 token，登入後導向後台 -->
     <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on('init', (user: any) => {
+      window.addEventListener('load', () => {
+        const identity = (window as any).netlifyIdentity;
+        if (!identity) return;
+
+        identity.on('init', (user: any) => {
           if (!user) {
-            window.netlifyIdentity.on('login', () => {
+            identity.on('login', () => {
               document.location.href = '/admin/';
             });
           }
         });
-      }
+
+        // 偵測 URL hash 中的 token，自動開啟彈窗
+        const hash = window.location.hash;
+        if (hash.includes('invite_token') || hash.includes('recovery_token') || hash.includes('confirmation_token')) {
+          identity.open();
+        }
+      });
     </script>
 
     <!-- GSAP + Lenis 平滑滾動 -->
