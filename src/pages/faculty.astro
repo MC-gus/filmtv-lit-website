@@ -110,7 +110,7 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
             {mentors.map((mentor, i) => (
               <div
                 class="mentor-card reveal group border border-white/10 hover:border-film-gold transition-all duration-300 p-6"
-                data-specialty={mentor.data.specialty}
+                data-roles={JSON.stringify(mentor.data.roles ?? [])}
                 style={`transition-delay: ${i * 60}ms`}
               >
                 {mentor.data.photo ? (
@@ -157,8 +157,8 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
       let visible = 0;
 
       cards.forEach(card => {
-        const specialty = card.dataset.specialty ?? '';
-        const match = !role || specialty.includes(role);
+        const roles: string[] = JSON.parse(card.dataset.roles ?? '[]');
+        const match = !role || roles.includes(role);
         card.style.display = match ? '' : 'none';
         if (match) visible++;
       });

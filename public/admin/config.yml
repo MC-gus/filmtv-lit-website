@@ -45,7 +45,13 @@ collections:
     fields:
       - { label: 姓名, name: name, widget: string }
       - { label: 現職 / 頭銜, name: title, widget: string, hint: "例如：台視新聞部導播、廣告導演" }
-      - { label: 專長領域, name: specialty, widget: string }
+      - { label: 專長簡述, name: specialty, widget: string, hint: "簡短說明，例如：紀錄片攝影、廣告影像" }
+      - label: 所屬分類（可複選）
+        name: roles
+        widget: select
+        multiple: true
+        options: [導演, 攝影師, 剪輯師, 製片人, 聲音設計, 新媒體創作者]
+        hint: "對應師資頁的六大分類標籤，可勾選多個"
       - { label: 照片, name: photo, widget: image, required: false }
       - { label: 簡介, name: bio, widget: text }
       - { label: 授課學期, name: semester, widget: string, required: false, hint: "例如：113學年度上學期" }
