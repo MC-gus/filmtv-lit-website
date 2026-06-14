@@ -3,7 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../content/settings/facilities.json';
 ---
 
-<BaseLayout title={`${data.hero_title} | 影視傳播系`}>
+<BaseLayout
+  title={`${data.hero_title} | 影視傳播系`}
+  description="黎明技術學院影視傳播系擁有專業攝影棚、剪輯後製室、錄音室、放映廳等業界等級設備，提供學生最完整的影視製作實習環境。"
+  keywords="影視傳播系設備,電影系攝影棚,剪輯室,錄音室,影視系器材,專業放映廳,影視製作設備"
+>
 
   <section class="pt-40 pb-20 px-6 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>

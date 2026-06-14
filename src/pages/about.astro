@@ -3,7 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../content/settings/about.json';
 ---
 
-<BaseLayout title={`${data.hero_title} | 影視傳播系`}>
+<BaseLayout
+  title={`${data.hero_title} | 影視傳播系`}
+  description="了解黎明技術學院影視傳播系的辦學理念、四大教育目標與發展歷史。超過 20 年培育影視人才，持續深化產學合作，連結創作與產業。"
+  keywords="黎明技術學院影視傳播系介紹,影視系辦學理念,電影系特色,影視傳播系歷史"
+>
 
   <section class="pt-40 pb-20 px-6 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>

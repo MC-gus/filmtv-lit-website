@@ -3,7 +3,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import data from '../content/settings/admission.json';
 ---
 
-<BaseLayout title={`${data.hero_title} | 影視傳播系`}>
+<BaseLayout
+  title={`${data.hero_title} | 影視傳播系`}
+  description="黎明技術學院影視傳播系招生資訊，包含個人申請、繁星推薦、考試分發、四技二專統測等入學管道，歡迎對影視創作有熱情的你加入我們。"
+  keywords="影視傳播系招生,電影系入學,影視系申請,黎明技術學院招生,影視系考試,統測影視傳播"
+>
 
   <section class="pt-40 pb-20 px-6 relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>

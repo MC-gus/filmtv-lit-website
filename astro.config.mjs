@@ -1,7 +1,11 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  integrations: [tailwind()],
-  site: 'https://filmtv-lit.netlify.app',
+  site: 'https://steady-liger-986d40.netlify.app',
+  integrations: [
+    tailwind(),
+    sitemap(),
+  ],
 });

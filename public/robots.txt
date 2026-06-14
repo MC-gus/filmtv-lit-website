@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://steady-liger-986d40.netlify.app/sitemap-index.xml

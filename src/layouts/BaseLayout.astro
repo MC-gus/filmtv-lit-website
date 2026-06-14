@@ -6,12 +6,48 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  ogType?: string;
+  keywords?: string;
+  canonical?: string;
 }
 
 const {
   title = '黎明技術學院 影視傳播系',
-  description = '培育影視傳播專業人才，連結創作與產業的橋樑。',
+  description = '黎明技術學院影視傳播系，培育影視製作、劇本創作、攝影剪輯等專業人才。提供完整課程、業界實習與頂尖設備，是你踏入影視產業的最佳起點。',
+  ogImage = '/images/og-default.jpg',
+  ogType = 'website',
+  keywords = '影視傳播系,影視系,電影系,黎明技術學院,影視製作,攝影,剪輯,劇本創作,新北市大學,影視科系推薦',
+  canonical,
 } = Astro.props;
+
+const siteUrl = 'https://steady-liger-986d40.netlify.app';
+const canonicalUrl = canonical ?? `${siteUrl}${Astro.url.pathname}`;
+const fullTitle = title.includes('影視傳播系') ? title : `${title} | 黎明技術學院 影視傳播系`;
+
+// JSON-LD 結構化資料（教育機構）
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EducationalOrganization',
+  name: '黎明技術學院 影視傳播系',
+  alternateName: 'Department of Film & Television, Lee-Ming Institute of Technology',
+  url: siteUrl,
+  logo: `${siteUrl}/favicon.svg`,
+  description: description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: '黎專路一號',
+    addressLocality: '泰山區',
+    addressRegion: '新北市',
+    addressCountry: 'TW',
+  },
+  parentOrganization: {
+    '@type': 'CollegeOrUniversity',
+    name: '黎明技術學院',
+    url: 'https://www.lit.edu.tw',
+  },
+  sameAs: [],
+};
 ---
 
 <!DOCTYPE html>
@@ -19,34 +55,56 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 基本 SEO -->
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <title>{title}</title>
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="黎明技術學院 影視傳播系" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph（Facebook、LINE 分享預覽） -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="黎明技術學院 影視傳播系" />
+    <meta property="og:locale" content="zh_TW" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Netlify Identity Widget（處理登入、邀請、密碼設定） -->
+
+    <!-- 結構化資料 JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Netlify Identity Widget -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body class="bg-film-black text-film-light font-sans">
     <Navbar />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <Footer />
 
-    <!-- Netlify Identity：處理邀請/密碼重設 token，登入後導向後台 -->
+    <!-- Netlify Identity：處理邀請/密碼重設 token -->
     <script>
       window.addEventListener('load', () => {
         const identity = (window as any).netlifyIdentity;
         if (!identity) return;
-
         identity.on('init', (user: any) => {
           if (!user) {
-            identity.on('login', () => {
-              document.location.href = '/admin/';
-            });
+            identity.on('login', () => { document.location.href = '/admin/'; });
           }
         });
-
-        // 偵測 URL hash 中的 token，自動開啟彈窗
         const hash = window.location.hash;
         if (hash.includes('invite_token') || hash.includes('recovery_token') || hash.includes('confirmation_token')) {
           identity.open();
@@ -61,62 +119,30 @@ const {
 
       gsap.registerPlugin(ScrollTrigger);
 
-      // Lenis 平滑滾動
       async function initLenis() {
         const Lenis = (await import('lenis')).default;
         const lenis = new Lenis({
           duration: 1.2,
           easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         });
-
         lenis.on('scroll', ScrollTrigger.update);
-
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
-        });
+        gsap.ticker.add((time) => { lenis.raf(time * 1000); });
         gsap.ticker.lagSmoothing(0);
       }
 
       initLenis();
 
-      // 滾動淡入動畫
       gsap.utils.toArray<HTMLElement>('.reveal').forEach((el) => {
-        gsap.to(el, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-          },
-        });
+        gsap.to(el, { opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%' } });
       });
-
       gsap.utils.toArray<HTMLElement>('.reveal-left').forEach((el) => {
-        gsap.to(el, {
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-          },
-        });
+        gsap.to(el, { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%' } });
       });
-
       gsap.utils.toArray<HTMLElement>('.reveal-right').forEach((el) => {
-        gsap.to(el, {
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: el,
-            start: 'top 85%',
-          },
-        });
+        gsap.to(el, { opacity: 1, x: 0, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 85%' } });
       });
     </script>
   </body>
