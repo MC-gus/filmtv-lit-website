@@ -72,38 +72,54 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
   <section class="py-24 px-6 bg-film-gray">
     <div class="max-w-7xl mx-auto">
       <!-- 說明文字 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-16">
         <div class="reveal-left">
           <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{pageData.mentors_subtitle}</p>
           <h2 class="font-display text-4xl text-white mb-8">{pageData.mentors_title}</h2>
           <p class="text-film-light/60 leading-relaxed mb-6">{pageData.mentors_p1}</p>
           <p class="text-film-light/60 leading-relaxed">{pageData.mentors_p2}</p>
         </div>
+
+        <!-- 可點擊的分類標籤 -->
         <div class="reveal-right grid grid-cols-2 gap-4">
           {pageData.mentor_roles.map((role: string) => (
-            <div class="border border-white/10 hover:border-film-gold p-4 text-center transition-colors">
-              <p class="text-film-light/60 text-sm">{role}</p>
-            </div>
+            <button
+              class="mentor-filter-btn border border-white/10 hover:border-film-gold p-4 text-center transition-all duration-300 cursor-pointer group"
+              data-role={role}
+            >
+              <p class="text-film-light/60 text-sm group-hover:text-film-gold transition-colors">{role}</p>
+              <p class="text-film-gold/0 text-xs mt-1 group-hover:text-film-gold/60 transition-colors tracking-widest">點擊篩選</p>
+            </button>
           ))}
         </div>
       </div>
 
-      <!-- 業師卡片 -->
+      <!-- 業師卡片區 -->
       {mentors.length > 0 && (
-        <div>
-          <h3 class="font-display text-2xl text-white mb-10 reveal">歷屆業師</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div id="mentors-section">
+          <div class="flex items-center justify-between mb-8">
+            <h3 class="font-display text-2xl text-white">
+              歷屆業師
+              <span id="active-filter-label" class="text-film-gold text-lg ml-3 hidden"></span>
+            </h3>
+            <button id="clear-filter" class="hidden text-xs text-film-light/40 hover:text-film-gold tracking-widest uppercase transition-colors">
+              ✕ 清除篩選
+            </button>
+          </div>
+          <div id="mentor-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {mentors.map((mentor, i) => (
-              <div class="reveal group border border-white/10 hover:border-film-gold transition-all duration-300 p-6"
-                   style={`transition-delay: ${i * 60}ms`}>
-                <!-- 照片或首字 -->
+              <div
+                class="mentor-card reveal group border border-white/10 hover:border-film-gold transition-all duration-300 p-6"
+                data-specialty={mentor.data.specialty}
+                style={`transition-delay: ${i * 60}ms`}
+              >
                 {mentor.data.photo ? (
-                  <div class="w-16 h-16 mb-4 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
-                    <img src={mentor.data.photo} alt={mentor.data.name} class="w-full h-full object-cover" />
+                  <div class="w-full aspect-square mb-4 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
+                    <img src={mentor.data.photo} alt={mentor.data.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                 ) : (
-                  <div class="w-16 h-16 bg-film-black border border-white/20 mb-4 flex items-center justify-center group-hover:border-film-gold transition-colors">
-                    <span class="font-display text-xl text-film-gold/40 group-hover:text-film-gold transition-colors">
+                  <div class="w-full aspect-square bg-film-black border border-white/20 mb-4 flex items-center justify-center group-hover:border-film-gold transition-colors">
+                    <span class="font-display text-5xl text-film-gold/20 group-hover:text-film-gold/50 transition-colors">
                       {mentor.data.name[0]}
                     </span>
                   </div>
@@ -112,19 +128,65 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
                   {mentor.data.name}
                 </h4>
                 <p class="text-film-gold text-xs mb-1">{mentor.data.title}</p>
-                <p class="text-film-light/40 text-xs mb-3">{mentor.data.specialty}</p>
+                <p class="text-film-light/40 text-xs mb-3 border-b border-white/10 pb-3">{mentor.data.specialty}</p>
+                <p class="text-film-light/60 text-xs leading-relaxed">{mentor.data.bio}</p>
                 {mentor.data.semester && (
-                  <span class="text-xs border border-white/20 text-film-light/40 px-2 py-0.5">
+                  <span class="inline-block mt-3 text-xs border border-white/20 text-film-light/40 px-2 py-0.5">
                     {mentor.data.semester}
                   </span>
                 )}
-                <p class="text-film-light/60 text-xs leading-relaxed mt-3">{mentor.data.bio}</p>
               </div>
             ))}
           </div>
+          <p id="no-result" class="hidden text-film-light/40 text-sm mt-4">此分類目前尚無業師資料。</p>
         </div>
       )}
     </div>
   </section>
+
+  <script>
+    const filterBtns = document.querySelectorAll<HTMLButtonElement>('.mentor-filter-btn');
+    const cards = document.querySelectorAll<HTMLElement>('.mentor-card');
+    const clearBtn = document.getElementById('clear-filter');
+    const filterLabel = document.getElementById('active-filter-label');
+    const noResult = document.getElementById('no-result');
+    let activeRole = '';
+
+    function applyFilter(role: string) {
+      activeRole = role;
+      let visible = 0;
+
+      cards.forEach(card => {
+        const specialty = card.dataset.specialty ?? '';
+        const match = !role || specialty.includes(role);
+        card.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+
+      // 更新 UI 狀態
+      filterBtns.forEach(btn => {
+        const isActive = btn.dataset.role === role;
+        btn.classList.toggle('border-film-gold', isActive);
+        btn.classList.toggle('bg-film-gold/10', isActive);
+        btn.querySelector('p')?.classList.toggle('text-film-gold', isActive);
+      });
+
+      if (filterLabel) {
+        filterLabel.textContent = role ? `— ${role}` : '';
+        filterLabel.classList.toggle('hidden', !role);
+      }
+      clearBtn?.classList.toggle('hidden', !role);
+      noResult?.classList.toggle('hidden', visible > 0 || !role);
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const role = btn.dataset.role ?? '';
+        applyFilter(activeRole === role ? '' : role); // 再點同一個取消篩選
+      });
+    });
+
+    clearBtn?.addEventListener('click', () => applyFilter(''));
+  </script>
 
 </BaseLayout>
