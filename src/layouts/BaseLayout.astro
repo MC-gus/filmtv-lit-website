@@ -22,6 +22,8 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Netlify Identity Widget（處理登入、邀請、密碼設定） -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body class="bg-film-black text-film-light font-sans">
     <Navbar />
@@ -29,6 +31,19 @@ const {
       <slot />
     </main>
     <Footer />
+
+    <!-- Netlify Identity：登入後導向後台 -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('init', (user: any) => {
+          if (!user) {
+            window.netlifyIdentity.on('login', () => {
+              document.location.href = '/admin/';
+            });
+          }
+        });
+      }
+    </script>
 
     <!-- GSAP + Lenis 平滑滾動 -->
     <script>
