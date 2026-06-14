@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const news = await getCollection('news').catch(() => []);
+  return news.map(item => ({ params: { slug: item.slug }, props: { item } }));
+}
+
+const { item } = Astro.props;
+const { Content } = await item.render();
+const date = new Date(item.data.date).toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout
+  title={`${item.data.title} | 影視傳播系`}
+  description={item.data.summary}
+  ogImage={item.data.cover}
+  ogType="article"
+>
+  <!-- 封面圖 -->
+  {item.data.cover && (
+    <div class="h-[50vh] overflow-hidden relative">
+      <img src={item.data.cover} alt={item.data.title} class="w-full h-full object-cover opacity-60" />
+      <div class="absolute inset-0 bg-gradient-to-t from-film-black to-transparent"></div>
+    </div>
+  )}
+
+  <article class={`px-6 max-w-3xl mx-auto ${item.data.cover ? 'pt-12' : 'pt-40'} pb-24`}>
+    <!-- 分類 + 日期 -->
+    <div class="flex items-center gap-4 mb-6">
+      <span class="text-xs border border-film-gold/50 text-film-gold px-3 py-1">{item.data.category}</span>
+      <span class="text-film-light/40 text-sm">{date}</span>
+    </div>
+
+    <!-- 標題 -->
+    <h1 class="font-display text-3xl md:text-5xl text-white font-bold leading-tight mb-8">
+      {item.data.title}
+    </h1>
+
+    <!-- 摘要 -->
+    <p class="text-film-gold text-lg leading-relaxed mb-10 border-l-2 border-film-gold pl-4">
+      {item.data.summary}
+    </p>
+
+    <!-- 內文 -->
+    <div class="prose prose-invert prose-lg max-w-none
+      prose-headings:font-display prose-headings:text-white
+      prose-p:text-film-light/70 prose-p:leading-relaxed
+      prose-a:text-film-gold prose-a:no-underline hover:prose-a:underline
+      prose-strong:text-white prose-img:rounded">
+      <Content />
+    </div>
+
+    <!-- 返回按鈕 -->
+    <div class="mt-16 pt-8 border-t border-white/10">
+      <a href="/news" class="inline-flex items-center gap-3 text-film-gold text-sm tracking-widest uppercase hover:gap-6 transition-all duration-300">
+        <span class="w-8 h-px bg-film-gold"></span>
+        返回最新消息
+      </a>
+    </div>
+  </article>
+</BaseLayout>

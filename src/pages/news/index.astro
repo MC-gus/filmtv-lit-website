@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allNews = await getCollection('news').catch(() => []);
+const news = allNews.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<BaseLayout
+  title="最新消息 | 影視傳播系"
+  description="黎明技術學院影視傳播系最新消息，包含得獎消息、產學合作、校園活動與招生資訊。"
+  keywords="影視傳播系最新消息,黎明技術學院影視系活動,影視系得獎"
+>
+  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
+    <div class="relative z-10 max-w-7xl mx-auto">
+      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">Latest News</p>
+      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">最新消息</h1>
+    </div>
+  </section>
+
+  <section class="py-16 px-6">
+    <div class="max-w-7xl mx-auto">
+      {news.length === 0 ? (
+        <p class="text-film-light/40">尚無消息，請至後台新增。</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {news.map((item, i) => {
+            const date = new Date(item.data.date).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            return (
+              <article class="reveal group" style={`transition-delay: ${i * 60}ms`}>
+                <a href={`/news/${item.slug}`} class="block border border-white/10 group-hover:border-film-gold transition-colors duration-300 h-full flex flex-col">
+                  {item.data.cover ? (
+                    <div class="aspect-video overflow-hidden">
+                      <img src={item.data.cover} alt={item.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                  ) : (
+                    <div class="aspect-video bg-film-gray flex items-center justify-center border-b border-white/10">
+                      <span class="text-film-gold/20 font-display text-4xl">影</span>
+                    </div>
+                  )}
+                  <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="text-film-gold text-xs tracking-widest">{date}</span>
+                      <span class="text-film-light/40 text-xs border border-white/20 px-2 py-0.5">{item.data.category}</span>
+                    </div>
+                    <h2 class="text-white font-semibold leading-snug mb-3 group-hover:text-film-gold transition-colors">
+                      {item.data.title}
+                    </h2>
+                    <p class="text-film-light/50 text-sm leading-relaxed flex-grow">{item.data.summary}</p>
+                    <div class="mt-4 text-film-gold text-xs tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                      閱讀更多 →
+                    </div>
+                  </div>
+                </a>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

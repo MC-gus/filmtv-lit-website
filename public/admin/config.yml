@@ -22,6 +22,7 @@ collections:
       - { label: 標題, name: title, widget: string }
       - { label: 發布日期, name: date, widget: datetime }
       - { label: 分類, name: category, widget: select, options: [得獎消息, 產學合作, 校園活動, 招生資訊, 其他] }
+      - { label: 封面圖片, name: cover, widget: image, required: false, hint: "建議尺寸 1200×630px，會顯示在消息卡片上" }
       - { label: 摘要, name: summary, widget: text }
       - { label: 內文, name: body, widget: markdown }
 
