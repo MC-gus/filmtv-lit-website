@@ -38,6 +38,19 @@ collections:
       - { label: 簡介, name: bio, widget: text }
       - { label: 排序, name: order, widget: number, default: 99 }
 
+  - name: mentors
+    label: 🎓 業師講座
+    folder: src/content/mentors
+    create: true
+    fields:
+      - { label: 姓名, name: name, widget: string }
+      - { label: 現職 / 頭銜, name: title, widget: string, hint: "例如：台視新聞部導播、廣告導演" }
+      - { label: 專長領域, name: specialty, widget: string }
+      - { label: 照片, name: photo, widget: image, required: false }
+      - { label: 簡介, name: bio, widget: text }
+      - { label: 授課學期, name: semester, widget: string, required: false, hint: "例如：113學年度上學期" }
+      - { label: 排序, name: order, widget: number, default: 99 }
+
   - name: works
     label: 🎬 作品預告
     folder: src/content/works

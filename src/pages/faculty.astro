@@ -5,6 +5,9 @@ import pageData from '../content/settings/faculty.json';
 
 const allFaculty = await getCollection('faculty').catch(() => []);
 const faculty = allFaculty.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const allMentors = await getCollection('mentors').catch(() => []);
+const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 ---
 
 <BaseLayout
@@ -68,7 +71,8 @@ const faculty = allFaculty.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
   <!-- 業師講座 -->
   <section class="py-24 px-6 bg-film-gray">
     <div class="max-w-7xl mx-auto">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <!-- 說明文字 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
         <div class="reveal-left">
           <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{pageData.mentors_subtitle}</p>
           <h2 class="font-display text-4xl text-white mb-8">{pageData.mentors_title}</h2>
@@ -83,6 +87,43 @@ const faculty = allFaculty.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
           ))}
         </div>
       </div>
+
+      <!-- 業師卡片 -->
+      {mentors.length > 0 && (
+        <div>
+          <h3 class="font-display text-2xl text-white mb-10 reveal">歷屆業師</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {mentors.map((mentor, i) => (
+              <div class="reveal group border border-white/10 hover:border-film-gold transition-all duration-300 p-6"
+                   style={`transition-delay: ${i * 60}ms`}>
+                <!-- 照片或首字 -->
+                {mentor.data.photo ? (
+                  <div class="w-16 h-16 mb-4 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
+                    <img src={mentor.data.photo} alt={mentor.data.name} class="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div class="w-16 h-16 bg-film-black border border-white/20 mb-4 flex items-center justify-center group-hover:border-film-gold transition-colors">
+                    <span class="font-display text-xl text-film-gold/40 group-hover:text-film-gold transition-colors">
+                      {mentor.data.name[0]}
+                    </span>
+                  </div>
+                )}
+                <h4 class="text-white font-semibold mb-1 group-hover:text-film-gold transition-colors">
+                  {mentor.data.name}
+                </h4>
+                <p class="text-film-gold text-xs mb-1">{mentor.data.title}</p>
+                <p class="text-film-light/40 text-xs mb-3">{mentor.data.specialty}</p>
+                {mentor.data.semester && (
+                  <span class="text-xs border border-white/20 text-film-light/40 px-2 py-0.5">
+                    {mentor.data.semester}
+                  </span>
+                )}
+                <p class="text-film-light/60 text-xs leading-relaxed mt-3">{mentor.data.bio}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   </section>
 
