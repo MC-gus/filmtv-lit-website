@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import site from '../content/settings/site.json';
 
 interface Props {
   title?: string;
@@ -15,7 +16,7 @@ interface Props {
 const {
   title = '黎明技術學院 影視傳播系',
   description = '黎明技術學院影視傳播系，培育影視製作、劇本創作、攝影剪輯等專業人才。提供完整課程、業界實習與頂尖設備，是你踏入影視產業的最佳起點。',
-  ogImage = '/images/og-default.jpg',
+  ogImage = site.og_image,
   ogType = 'website',
   keywords = '影視傳播系,影視系,電影系,黎明技術學院,影視製作,攝影,剪輯,劇本創作,新北市大學,影視科系推薦',
   canonical,
@@ -46,8 +47,9 @@ const jsonLd = {
     name: '黎明技術學院',
     url: 'https://www.lit.edu.tw',
   },
-  sameAs: [],
+  sameAs: [site.facebook, site.instagram, site.youtube_channel].filter(Boolean),
 };
+const ogImageUrl = ogImage ? new URL(ogImage, siteUrl).href : '';
 ---
 
 <!DOCTYPE html>
@@ -68,7 +70,7 @@ const jsonLd = {
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={`${siteUrl}${ogImage}`} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content="黎明技術學院 影視傳播系" />
     <meta property="og:locale" content="zh_TW" />
@@ -77,7 +79,7 @@ const jsonLd = {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

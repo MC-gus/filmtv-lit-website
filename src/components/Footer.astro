@@ -1,4 +1,12 @@
 ---
+import site from '../content/settings/site.json';
+
+const socials = [
+  { label: 'Facebook', href: site.facebook },
+  { label: 'Instagram', href: site.instagram },
+  { label: 'YouTube', href: site.youtube_channel },
+  { label: 'LINE', href: site.line },
+].filter(s => s.href);
 ---
 <footer class="bg-film-dark border-t border-white/10 py-16">
   <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -33,10 +41,11 @@
     <!-- 社群媒體 -->
     <div>
       <h3 class="text-white font-semibold mb-4 text-sm tracking-widest uppercase">關注我們</h3>
-      <div class="flex gap-4">
-        <a href="#" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">Facebook</a>
-        <a href="#" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">Instagram</a>
-        <a href="#" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">YouTube</a>
+      <div class="flex flex-wrap gap-4">
+        {socials.length === 0 && <span class="text-film-light/30 text-sm">（請至後台「全站設定」填入連結）</span>}
+        {socials.map(s => (
+          <a href={s.href} target="_blank" rel="noopener" class="text-film-light/60 hover:text-film-gold transition-colors text-sm">{s.label}</a>
+        ))}
       </div>
     </div>
   </div>

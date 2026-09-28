@@ -30,6 +30,8 @@ collections:
     label: 👨‍🏫 師資資料
     folder: src/content/faculty
     create: true
+    identifier_field: name
+    summary: "{{name}}（{{title}}）"
     fields:
       - { label: 姓名, name: name, widget: string }
       - { label: 職稱, name: title, widget: string }
@@ -42,6 +44,8 @@ collections:
     label: 🎓 業師講座
     folder: src/content/mentors
     create: true
+    identifier_field: name
+    summary: "{{name}}（{{title}}）"
     fields:
       - { label: 姓名, name: name, widget: string }
       - { label: 現職 / 頭銜, name: title, widget: string, hint: "例如：台視新聞部導播、廣告導演" }
@@ -64,8 +68,8 @@ collections:
     fields:
       - { label: 作品名稱, name: title, widget: string }
       - { label: 年份, name: year, widget: string }
-      - { label: YouTube 嵌入網址, name: youtube, widget: string, required: false, hint: "請使用 embed 格式，例如：https://www.youtube.com/embed/xxxxx" }
-      - { label: 封面圖片, name: cover, widget: image, required: false }
+      - { label: YouTube 網址, name: youtube, widget: string, required: false, hint: "直接貼 YouTube 影片網址即可（例如 https://www.youtube.com/watch?v=xxxx 或 https://youtu.be/xxxx）" }
+      - { label: 封面圖片, name: cover, widget: image, required: false, hint: "沒有 YouTube 影片時顯示這張圖" }
       - { label: 作品描述, name: description, widget: text }
       - { label: 得獎紀錄, name: award, widget: string, required: false }
       - { label: 類型, name: type, widget: select, options: [短片, 紀錄片, 廣告, 音樂錄影帶, 畢業製作, 實驗影像] }
@@ -78,26 +82,51 @@ collections:
     label: 📄 頁面內容
     files:
 
+      - label: 🌐 全站設定
+        name: site
+        file: src/content/settings/site.json
+        fields:
+          - { label: 分享預覽圖, name: og_image, widget: image, required: false, hint: "分享到 LINE / Facebook 時顯示的圖，建議 1200×630px" }
+          - { label: Facebook 連結, name: facebook, widget: string, required: false }
+          - { label: Instagram 連結, name: instagram, widget: string, required: false }
+          - { label: YouTube 頻道連結, name: youtube_channel, widget: string, required: false }
+          - { label: LINE 官方帳號連結, name: line, widget: string, required: false }
+
       - label: 🏠 首頁
         name: home
         file: src/content/settings/home.json
         fields:
-          - { label: Hero 標語第一行, name: hero_line1, widget: string }
-          - { label: Hero 標語第二行, name: hero_line2, widget: string }
-          - label: 關於系所 第一段
-            name: about_p1
-            widget: text
-          - label: 關於系所 第二段
-            name: about_p2
-            widget: text
-          - { label: Facebook 連結, name: facebook, widget: string, required: false }
-          - { label: Instagram 連結, name: instagram, widget: string, required: false }
-          - { label: YouTube 頻道連結, name: youtube_channel, widget: string, required: false }
+          - { label: 首頁背景影片, name: hero_video, widget: file, required: false, hint: "MP4 格式，建議 15MB 以下、20-30 秒循環、無聲。有影片時優先播放影片" }
+          - { label: 首頁背景圖片, name: hero_image, widget: image, required: false, hint: "沒有影片時顯示；有影片時當作影片載入前的預覽畫面。建議 1920×1080px" }
+          - { label: 標語第一行, name: hero_line1, widget: string }
+          - { label: 標語第二行, name: hero_line2, widget: string }
+          - { label: 關於系所 標題, name: about_title, widget: string }
+          - { label: 關於系所 第一段, name: about_p1, widget: text }
+          - { label: 關於系所 第二段, name: about_p2, widget: text }
+          - label: 數字亮點
+            name: stats
+            widget: list
+            fields:
+              - { label: 數字, name: num, widget: string, hint: "例如 20+" }
+              - { label: 說明, name: label, widget: string }
+          - { label: 學習優勢 標題, name: features_title, widget: string }
+          - label: 學習優勢
+            name: features
+            widget: list
+            fields:
+              - { label: 圖片, name: image, widget: image, required: false, hint: "有圖片時取代上方 Emoji 圖示" }
+              - { label: 圖示 Emoji, name: icon, widget: string, required: false }
+              - { label: 標題, name: title, widget: string }
+              - { label: 說明, name: desc, widget: text }
+          - { label: 底部招生區 背景圖, name: cta_image, widget: image, required: false }
+          - { label: 底部招生區 標題, name: cta_title, widget: string }
+          - { label: 底部招生區 說明, name: cta_desc, widget: text }
 
       - label: 📖 學系簡介
         name: about
         file: src/content/settings/about.json
         fields:
+          - { label: 頁面頂部背景圖, name: hero_image, widget: image, required: false, hint: "橫幅背景照片，建議 1920×800px；不上傳則維持深色漸層" }
           - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
           - { label: 頁面標題, name: hero_title, widget: string }
           - { label: 理念區塊英文標題, name: philosophy_subtitle, widget: string }
@@ -105,6 +134,7 @@ collections:
           - { label: 理念說明第一段, name: philosophy_p1, widget: text }
           - { label: 理念說明第二段, name: philosophy_p2, widget: text }
           - { label: 理念說明第三段, name: philosophy_p3, widget: text }
+          - { label: 理念區塊圖片, name: philosophy_image, widget: image, required: false, hint: "顯示在理念文字右側，建議 4:3 比例" }
           - { label: 教育目標英文副標題, name: goals_subtitle, widget: string }
           - { label: 教育目標標題, name: goals_title, widget: string }
           - label: 教育目標（四項）
@@ -128,6 +158,7 @@ collections:
         name: faculty_page
         file: src/content/settings/faculty.json
         fields:
+          - { label: 頁面頂部背景圖, name: hero_image, widget: image, required: false, hint: "橫幅背景照片，建議 1920×800px；不上傳則維持深色漸層" }
           - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
           - { label: 頁面標題, name: hero_title, widget: string }
           - { label: 師資介紹文字, name: intro, widget: text }
@@ -144,6 +175,7 @@ collections:
         name: curriculum
         file: src/content/settings/curriculum.json
         fields:
+          - { label: 頁面頂部背景圖, name: hero_image, widget: image, required: false, hint: "橫幅背景照片，建議 1920×800px；不上傳則維持深色漸層" }
           - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
           - { label: 頁面標題, name: hero_title, widget: string }
           - { label: 課程介紹說明, name: intro, widget: text }
@@ -172,6 +204,7 @@ collections:
         name: facilities
         file: src/content/settings/facilities.json
         fields:
+          - { label: 頁面頂部背景圖, name: hero_image, widget: image, required: false, hint: "橫幅背景照片，建議 1920×800px；不上傳則維持深色漸層" }
           - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
           - { label: 頁面標題, name: hero_title, widget: string }
           - { label: 頁面說明, name: intro, widget: text }
@@ -179,6 +212,7 @@ collections:
             name: facilities
             widget: list
             fields:
+              - { label: 設備照片, name: image, widget: image, required: false, hint: "建議 16:9 比例" }
               - { label: 設備名稱, name: name, widget: string }
               - { label: 說明, name: desc, widget: text }
               - label: 標籤
@@ -192,6 +226,7 @@ collections:
         name: admission
         file: src/content/settings/admission.json
         fields:
+          - { label: 頁面頂部背景圖, name: hero_image, widget: image, required: false, hint: "橫幅背景照片，建議 1920×800px；不上傳則維持深色漸層" }
           - { label: 頁面英文副標題, name: hero_subtitle, widget: string }
           - { label: 頁面標題, name: hero_title, widget: string }
           - { label: 招生說明, name: intro, widget: text }

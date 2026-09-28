@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import data from '../content/settings/about.json';
 ---
 
@@ -9,13 +10,7 @@ import data from '../content/settings/about.json';
   keywords="黎明技術學院影視傳播系介紹,影視系辦學理念,電影系特色,影視傳播系歷史"
 >
 
-  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
-    <div class="relative z-10 max-w-7xl mx-auto">
-      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.hero_subtitle}</p>
-      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">{data.hero_title}</h1>
-    </div>
-  </section>
+  <PageHero subtitle={data.hero_subtitle} title={data.hero_title} image={data.hero_image} />
 
   <!-- 系所理念 -->
   <section class="py-24 px-6">
@@ -28,12 +23,18 @@ import data from '../content/settings/about.json';
         <p class="text-film-light/60 leading-relaxed">{data.philosophy_p3}</p>
       </div>
       <div class="reveal-right relative">
-        <div class="aspect-[4/3] bg-film-gray border border-white/10 flex items-center justify-center">
-          <div class="text-center px-8">
-            <div class="font-display text-8xl text-film-gold/20 font-bold leading-none mb-4">影</div>
-            <p class="text-film-light/40 text-sm tracking-widest">FILM & TELEVISION</p>
+        {data.philosophy_image ? (
+          <div class="aspect-[4/3] overflow-hidden border border-white/10">
+            <img src={data.philosophy_image} alt={data.philosophy_title} class="w-full h-full object-cover" />
           </div>
-        </div>
+        ) : (
+          <div class="aspect-[4/3] bg-film-gray border border-white/10 flex items-center justify-center">
+            <div class="text-center px-8">
+              <div class="font-display text-8xl text-film-gold/20 font-bold leading-none mb-4">影</div>
+              <p class="text-film-light/40 text-sm tracking-widest">FILM & TELEVISION</p>
+            </div>
+          </div>
+        )}
         <div class="absolute -top-4 -right-4 w-32 h-32 border border-film-gold/30"></div>
         <div class="absolute -bottom-4 -left-4 w-32 h-32 border border-film-gold/30"></div>
       </div>

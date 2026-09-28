@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import { getCollection } from 'astro:content';
 import pageData from '../content/settings/faculty.json';
 
@@ -16,13 +17,7 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
   keywords="影視傳播系師資,電影系老師,影視製作教授,業師講座,影視系教師陣容"
 >
 
-  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
-    <div class="relative z-10 max-w-7xl mx-auto">
-      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{pageData.hero_subtitle}</p>
-      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">{pageData.hero_title}</h1>
-    </div>
-  </section>
+  <PageHero subtitle={pageData.hero_subtitle} title={pageData.hero_title} image={pageData.hero_image} />
 
   <!-- 師資介紹 -->
   <section class="py-24 px-6">

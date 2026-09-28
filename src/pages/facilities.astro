@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import data from '../content/settings/facilities.json';
 ---
 
@@ -9,13 +10,7 @@ import data from '../content/settings/facilities.json';
   keywords="影視傳播系設備,電影系攝影棚,剪輯室,錄音室,影視系器材,專業放映廳,影視製作設備"
 >
 
-  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
-    <div class="relative z-10 max-w-7xl mx-auto">
-      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.hero_subtitle}</p>
-      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">{data.hero_title}</h1>
-    </div>
-  </section>
+  <PageHero subtitle={data.hero_subtitle} title={data.hero_title} image={data.hero_image} />
 
   <section class="py-16 px-6">
     <div class="max-w-7xl mx-auto reveal">
@@ -26,16 +21,23 @@ import data from '../content/settings/facilities.json';
   <section class="py-12 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {data.facilities.map((item, i) => (
-        <div class="reveal border border-white/10 hover:border-film-gold group transition-colors duration-300 p-8"
+        <div class="reveal border border-white/10 hover:border-film-gold group transition-colors duration-300 flex flex-col"
              style={`transition-delay: ${i * 80}ms`}>
-          <h3 class="font-display text-xl text-white mb-4 group-hover:text-film-gold transition-colors">{item.name}</h3>
-          <p class="text-film-light/60 text-sm leading-relaxed mb-6">{item.desc}</p>
-          <div class="flex flex-wrap gap-2">
-            {item.tags.map(tag => (
-              <span class="text-xs border border-white/20 text-film-light/50 px-3 py-1 group-hover:border-film-gold/40 group-hover:text-film-gold transition-colors">
-                {tag}
-              </span>
-            ))}
+          {item.image && (
+            <div class="aspect-video overflow-hidden">
+              <img src={item.image} alt={item.name} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            </div>
+          )}
+          <div class="p-8">
+            <h3 class="font-display text-xl text-white mb-4 group-hover:text-film-gold transition-colors">{item.name}</h3>
+            <p class="text-film-light/60 text-sm leading-relaxed mb-6">{item.desc}</p>
+            <div class="flex flex-wrap gap-2">
+              {item.tags.map(tag => (
+                <span class="text-xs border border-white/20 text-film-light/50 px-3 py-1 group-hover:border-film-gold/40 group-hover:text-film-gold transition-colors">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       ))}

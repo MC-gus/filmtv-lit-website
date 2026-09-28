@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
 import data from '../content/settings/curriculum.json';
 ---
 
@@ -9,13 +10,7 @@ import data from '../content/settings/curriculum.json';
   keywords="影視傳播系課程,電影系課程規劃,影視製作課程,攝影課程,剪輯課程,劇本課程,影視系四年課表"
 >
 
-  <section class="pt-40 pb-20 px-6 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-film-gray to-film-black"></div>
-    <div class="relative z-10 max-w-7xl mx-auto">
-      <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.hero_subtitle}</p>
-      <h1 class="font-display text-5xl md:text-7xl text-white font-bold">{data.hero_title}</h1>
-    </div>
-  </section>
+  <PageHero subtitle={data.hero_subtitle} title={data.hero_title} image={data.hero_image} />
 
   <section class="py-16 px-6">
     <div class="max-w-7xl mx-auto reveal">

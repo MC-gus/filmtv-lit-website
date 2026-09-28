@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import home from '../content/settings/home.json';
 
 const allNews = await getCollection('news').catch(() => []);
 const latestNews = allNews
@@ -16,16 +17,18 @@ const latestNews = allNews
 
   <!-- ===== HERO ===== -->
   <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
-    <!-- 背景影片（先用漸層佔位，之後換成真實影片） -->
+    <!-- 背景：後台有上傳影片就播影片，否則用圖片，都沒有就是深色漸層 -->
     <div class="absolute inset-0 bg-gradient-to-br from-film-black via-film-gray to-film-black">
-      <!-- 替換成影片時取消下方註解 -->
-      <!--
-      <video
-        autoplay muted loop playsinline
-        class="absolute inset-0 w-full h-full object-cover opacity-50"
-        src="/videos/hero.mp4"
-      ></video>
-      -->
+      {home.hero_video ? (
+        <video
+          autoplay muted loop playsinline
+          poster={home.hero_image || undefined}
+          class="absolute inset-0 w-full h-full object-cover opacity-50"
+          src={home.hero_video}
+        ></video>
+      ) : home.hero_image && (
+        <img src={home.hero_image} alt="" class="absolute inset-0 w-full h-full object-cover opacity-50" />
+      )}
       <!-- 底部漸層遮罩 -->
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-film-black"></div>
       <!-- 紋路效果 -->
@@ -43,8 +46,8 @@ const latestNews = allNews
         影視傳播系
       </h1>
       <p id="hero-desc" class="text-film-light/70 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-12 opacity-0">
-        用鏡頭說故事，以影像探索世界<br />
-        培育下一代影視創作者
+        {home.hero_line1}<br />
+        {home.hero_line2}
       </p>
       <div id="hero-cta" class="flex flex-col sm:flex-row gap-4 justify-center opacity-0">
         <a href="/about"
@@ -71,16 +74,9 @@ const latestNews = allNews
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div class="reveal-left">
           <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">About Us</p>
-          <h2 class="font-display text-4xl md:text-5xl text-white leading-tight mb-8">
-            電影是說故事<br />最有力的語言
-          </h2>
-          <p class="text-film-light/60 leading-relaxed mb-6">
-            黎明技術學院影視傳播系致力於培育兼具理論素養與實務能力的影視傳播專業人才。
-            從劇本創作、導演技術、攝影美學到後期製作，我們提供完整的影像創作教育。
-          </p>
-          <p class="text-film-light/60 leading-relaxed mb-10">
-            我們相信每一個學生都有屬於自己的故事，而我們的使命就是給你說故事的能力與舞台。
-          </p>
+          <h2 class="font-display text-4xl md:text-5xl text-white leading-tight mb-8">{home.about_title}</h2>
+          <p class="text-film-light/60 leading-relaxed mb-6">{home.about_p1}</p>
+          <p class="text-film-light/60 leading-relaxed mb-10">{home.about_p2}</p>
           <a href="/about" class="inline-flex items-center gap-3 text-film-gold text-sm tracking-widest uppercase hover:gap-6 transition-all duration-300">
             深入了解
             <span class="w-8 h-px bg-film-gold"></span>
@@ -89,12 +85,7 @@ const latestNews = allNews
 
         <!-- 數字亮點 -->
         <div class="reveal-right grid grid-cols-2 gap-6">
-          {[
-            { num: '20+', label: '年辦學歷史' },
-            { num: '100%', label: '專業設備覆蓋' },
-            { num: '50+', label: '業界合作夥伴' },
-            { num: '1000+', label: '校友遍布各地' },
-          ].map(item => (
+          {home.stats.map(item => (
             <div class="border border-white/10 p-8 hover:border-film-gold transition-colors duration-300">
               <div class="font-display text-4xl text-film-gold font-bold mb-2">{item.num}</div>
               <div class="text-film-light/60 text-sm">{item.label}</div>
@@ -110,32 +101,23 @@ const latestNews = allNews
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-20 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">What We Offer</p>
-        <h2 class="font-display text-4xl md:text-5xl text-white">三大學習優勢</h2>
+        <h2 class="font-display text-4xl md:text-5xl text-white">{home.features_title}</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[
-          {
-            icon: '🎬',
-            title: '專業設備',
-            desc: '配備業界級攝影機、錄音室、剪輯室及專業攝影棚，讓你在學校就能接觸真實的業界環境。',
-          },
-          {
-            icon: '🎞️',
-            title: '實戰課程',
-            desc: '從一年級開始就動手拍，課程設計結合理論與實務，每學期都有真實作品產出。',
-          },
-          {
-            icon: '🤝',
-            title: '產業連結',
-            desc: '與電視台、廣告公司、電影公司等超過 50 家業界夥伴合作，提供實習與就業管道。',
-          },
-        ].map((item, i) => (
-          <div class={`reveal p-10 border border-white/10 hover:border-film-gold group transition-colors duration-300`}
+        {home.features.map((item, i) => (
+          <div class="reveal border border-white/10 hover:border-film-gold group transition-colors duration-300 flex flex-col"
                style={`transition-delay: ${i * 150}ms`}>
-            <div class="text-4xl mb-6">{item.icon}</div>
-            <h3 class="font-display text-xl text-white mb-4 group-hover:text-film-gold transition-colors">{item.title}</h3>
-            <p class="text-film-light/60 text-sm leading-relaxed">{item.desc}</p>
+            {item.image && (
+              <div class="aspect-[4/3] overflow-hidden">
+                <img src={item.image} alt={item.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              </div>
+            )}
+            <div class="p-10">
+              {!item.image && <div class="text-4xl mb-6">{item.icon}</div>}
+              <h3 class="font-display text-xl text-white mb-4 group-hover:text-film-gold transition-colors">{item.title}</h3>
+              <p class="text-film-light/60 text-sm leading-relaxed">{item.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -204,19 +186,20 @@ const latestNews = allNews
 
   <!-- ===== 招生 CTA ===== -->
   <section class="py-40 px-6 bg-film-gray relative overflow-hidden">
+    {home.cta_image && (
+      <>
+        <img src={home.cta_image} alt="" class="absolute inset-0 w-full h-full object-cover opacity-30" />
+        <div class="absolute inset-0 bg-gradient-to-b from-film-gray/60 to-film-black/80"></div>
+      </>
+    )}
     <div class="absolute inset-0 opacity-5">
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full border border-film-gold"></div>
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full border border-film-gold"></div>
     </div>
     <div class="relative z-10 max-w-3xl mx-auto text-center reveal">
       <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">Join Us</p>
-      <h2 class="font-display text-4xl md:text-6xl text-white mb-8 leading-tight">
-        準備好成為<br />下一位創作者了嗎？
-      </h2>
-      <p class="text-film-light/60 text-lg mb-12 leading-relaxed">
-        無論你對導演、攝影、剪輯還是幕後製作感興趣，<br />
-        影視傳播系都有你的位置。
-      </p>
+      <h2 class="font-display text-4xl md:text-6xl text-white mb-8 leading-tight">{home.cta_title}</h2>
+      <p class="text-film-light/60 text-lg mb-12 leading-relaxed">{home.cta_desc}</p>
       <a href="/admission"
         class="inline-block px-12 py-5 bg-film-gold text-film-black font-semibold text-sm tracking-widest uppercase hover:bg-white transition-colors duration-300">
         立即了解招生資訊
