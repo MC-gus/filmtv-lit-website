@@ -96,7 +96,7 @@ collections:
         name: home
         file: src/content/settings/home.json
         fields:
-          - { label: 首頁背景影片, name: hero_video, widget: file, required: false, hint: "MP4 格式，建議 15MB 以下、20-30 秒循環、無聲。有影片時優先播放影片" }
+          - { label: 首頁背景影片, name: hero_video, widget: file, required: false, hint: "可直接貼 YouTube 網址，或上傳 MP4（建議 15MB 以下、20-30 秒）。影片會靜音循環播放，有影片時優先播放影片" }
           - { label: 首頁背景圖片, name: hero_image, widget: image, required: false, hint: "沒有影片時顯示；有影片時當作影片載入前的預覽畫面。建議 1920×1080px" }
           - { label: 標語第一行, name: hero_line1, widget: string }
           - { label: 標語第二行, name: hero_line2, widget: string }

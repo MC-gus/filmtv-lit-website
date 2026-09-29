@@ -7,6 +7,12 @@ const allNews = await getCollection('news').catch(() => []);
 const latestNews = allNews
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
+
+// 背景影片可以是上傳的 MP4，也可以直接貼 YouTube 網址
+const ytId = home.hero_video?.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
+const ytSrc = ytId
+  ? `https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&playsinline=1&rel=0&modestbranding=1&disablekb=1&enablejsapi=1`
+  : '';
 ---
 
 <BaseLayout
@@ -19,15 +25,26 @@ const latestNews = allNews
   <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
     <!-- 背景：後台有上傳影片就播影片，否則用圖片，都沒有就是深色漸層 -->
     <div class="absolute inset-0 bg-gradient-to-br from-film-black via-film-gray to-film-black">
-      {home.hero_video ? (
+      {home.hero_image && (ytSrc || !home.hero_video) && (
+        <img src={home.hero_image} alt="" class="absolute inset-0 w-full h-full object-cover opacity-50" />
+      )}
+      {ytSrc ? (
+        <!-- YouTube 當背景：放大到蓋滿畫面、不可點擊 -->
+        <iframe
+          src={ytSrc}
+          id="hero-yt"
+          title="背景影片"
+          allow="autoplay; encrypted-media"
+          tabindex="-1"
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-125 pointer-events-none opacity-0 transition-opacity duration-1000 w-[177.78vh] h-[56.25vw] min-w-full min-h-full"
+        ></iframe>
+      ) : home.hero_video && (
         <video
           autoplay muted loop playsinline
           poster={home.hero_image || undefined}
           class="absolute inset-0 w-full h-full object-cover opacity-50"
           src={home.hero_video}
         ></video>
-      ) : home.hero_image && (
-        <img src={home.hero_image} alt="" class="absolute inset-0 w-full h-full object-cover opacity-50" />
       )}
       <!-- 底部漸層遮罩 -->
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-film-black"></div>
@@ -225,4 +242,22 @@ const latestNews = allNews
   gsap.set('#hero-title', { y: 50 });
   gsap.set('#hero-desc', { y: 30 });
   gsap.set('#hero-cta', { y: 30 });
+
+  // YouTube 背景：真的開始播放才淡入，被瀏覽器擋下自動播放時就維持背景圖片
+  const ytFrame = document.getElementById('hero-yt');
+  if (ytFrame) {
+    (window as any).onYouTubeIframeAPIReady = () => {
+      new (window as any).YT.Player('hero-yt', {
+        events: {
+          onReady: (e: any) => { e.target.mute(); e.target.playVideo(); },
+          onStateChange: (e: any) => {
+            if (e.data === 1) ytFrame.style.opacity = '0.5'; // 1 = 播放中
+          },
+        },
+      });
+    };
+    const api = document.createElement('script');
+    api.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(api);
+  }
 </script>
