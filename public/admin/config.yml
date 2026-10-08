@@ -36,7 +36,8 @@ collections:
       - { label: 姓名, name: name, widget: string }
       - { label: 職稱, name: title, widget: string }
       - { label: 專長領域, name: specialty, widget: string }
-      - { label: 照片, name: photo, widget: image, required: false }
+      - { label: 照片, name: photo, widget: image, required: false, hint: "直式照片（3:4），半身以上" }
+      - { label: 第二張照片（滑鼠移上去時顯示）, name: photo_hover, widget: image, required: false, hint: "建議同尺寸、不同表情或工作照；沒上傳就不切換" }
       - { label: 簡介, name: bio, widget: text }
       - { label: 排序, name: order, widget: number, default: 99 }
 

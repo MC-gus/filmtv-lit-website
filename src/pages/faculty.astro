@@ -35,12 +35,21 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
                  style={`transition-delay: ${i * 80}ms`}>
               <!-- 照片或首字佔位 -->
               {person.data.photo ? (
-                <div class="w-full aspect-[3/4] mb-6 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
+                <div class="relative w-full aspect-[3/4] mb-6 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
                   <img
                     src={person.data.photo}
                     alt={person.data.name}
-                    class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    class="w-full h-full object-cover object-top"
                   />
+                  <!-- 第二張照片：滑鼠移上去時淡入 -->
+                  {person.data.photo_hover && (
+                    <img
+                      src={person.data.photo_hover}
+                      alt=""
+                      loading="lazy"
+                      class="absolute inset-0 w-full h-full object-cover object-top opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    />
+                  )}
                 </div>
               ) : (
                 <div class="w-full aspect-[3/4] bg-film-gray border border-white/20 mb-6 flex items-center justify-center group-hover:border-film-gold transition-colors">
