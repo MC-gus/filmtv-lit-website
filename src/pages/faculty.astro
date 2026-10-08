@@ -20,7 +20,7 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
   <PageHero subtitle={pageData.hero_subtitle} title={pageData.hero_title} image={pageData.hero_image} />
 
   <!-- 師資介紹 -->
-  <section class="py-24 px-6">
+  <section class="pt-2 pb-24 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="mb-16 reveal">
         <p class="text-film-light/60 max-w-2xl leading-relaxed">{pageData.intro}</p>
@@ -35,16 +35,16 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
                  style={`transition-delay: ${i * 80}ms`}>
               <!-- 照片或首字佔位 -->
               {person.data.photo ? (
-                <div class="w-20 h-20 mb-6 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
+                <div class="w-full aspect-[3/4] mb-6 overflow-hidden border border-white/20 group-hover:border-film-gold transition-colors">
                   <img
                     src={person.data.photo}
                     alt={person.data.name}
-                    class="w-full h-full object-cover"
+                    class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
               ) : (
-                <div class="w-20 h-20 bg-film-gray border border-white/20 mb-6 flex items-center justify-center group-hover:border-film-gold transition-colors">
-                  <span class="font-display text-2xl text-film-gold/40 group-hover:text-film-gold transition-colors">
+                <div class="w-full aspect-[3/4] bg-film-gray border border-white/20 mb-6 flex items-center justify-center group-hover:border-film-gold transition-colors">
+                  <span class="font-display text-7xl text-film-gold/30 group-hover:text-film-gold/60 transition-colors">
                     {person.data.name[0]}
                   </span>
                 </div>
