@@ -1,14 +1,4 @@
 {
-  "hero_image": "",
-  "hero_subtitle": "About Us",
-  "hero_title": "學系簡介",
-  "philosophy_subtitle": "Our Philosophy",
-  "philosophy_title": "影像是時代的見證與語言",
-  "philosophy_p1": "黎明技術學院影視傳播系成立至今，始終秉持「理論與實務並重」的教育理念，培育兼具人文素養與專業技能的影視傳播人才。",
-  "philosophy_p2": "我們相信，影像不只是技術，更是一種思考方式、一種溝通語言。每一個鏡頭背後，都是創作者對世界的觀察與詮釋。",
-  "philosophy_p3": "在這裡，你不只學習如何操作攝影機，更學習如何用影像說出屬於你自己的故事。",
-  "goals_subtitle": "Educational Goals",
-  "goals_title": "四大教育目標",
   "goals": [
     {
       "num": "01",
@@ -32,7 +22,14 @@
     }
   ],
   "history_subtitle": "History",
+  "philosophy_subtitle": "Our Philosophy",
+  "philosophy_title": "實戰導向的教學，讓夢想更靠近現實",
   "history_title": "歷史沿革",
+  "philosophy_image": "",
+  "philosophy_p1": "我們相信，影像不只是課本上的理論，更是一種需要實踐的語言。",
+  "philosophy_p2": "老師會親自帶領學生進行實戰，從前期企劃、現場拍攝到後期製作，全程陪伴與指導，帶著學生走進真實的拍攝現場，累積實務經驗。",
+  "philosophy_p3": "在拍攝與製作過程中，老師會依照每位學生的表現與需求，協助分析問題並提供專業建議。若發現學生在某個環節有所不足，也會陪著學生一起思考解決方式，提供方向與方法，補足缺乏的能力與專業知識。\n\n我們不只是教你「怎麼拍」，更希望陪你把想法真正轉化成作品，讓每一次實戰都成為累積經驗與提升能力的過程。\n\n從學習到實踐，從想法到作品，讓每一位學生都能完成屬於自己的影像創作。",
+  "hero_title": "學系簡介",
   "history": [
     {
       "year": "2000",
@@ -60,5 +57,8 @@
       "desc": "AI 輔助製作、虛擬製片技術納入課程，培育符合未來需求的影視人才。"
     }
   ],
-  "philosophy_image": ""
+  "hero_image": "",
+  "goals_subtitle": "Educational Goals",
+  "goals_title": "四大教育目標",
+  "hero_subtitle": "About Us"
 }
