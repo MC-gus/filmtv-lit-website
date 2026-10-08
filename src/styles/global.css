@@ -46,3 +46,11 @@ body {
   opacity: 0;
   transform: translateX(60px);
 }
+
+/* 橫向滑動區塊隱藏捲軸（手機師資列表） */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

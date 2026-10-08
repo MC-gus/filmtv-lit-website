@@ -29,9 +29,13 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
       {faculty.length === 0 ? (
         <p class="text-film-light/40 text-sm">尚無師資資料，請至後台新增。</p>
       ) : (
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 手機：左右滑動；平板以上：格狀排列 -->
+        {faculty.length > 1 && (
+          <p class="md:hidden text-film-gold/60 text-xs tracking-widest mb-4">← 左右滑動看更多老師 →</p>
+        )}
+        <div class="no-scrollbar flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-6 px-6 md:mx-0 md:px-0 pb-2">
           {faculty.map((person, i) => (
-            <div class="reveal group border border-white/10 hover:border-film-gold transition-all duration-300 p-8"
+            <div class="reveal group shrink-0 w-[80%] md:w-auto snap-center border border-white/10 hover:border-film-gold transition-all duration-300 p-6 md:p-8"
                  style={`transition-delay: ${i * 80}ms`}>
               <!-- 照片或首字佔位 -->
               {person.data.photo ? (
