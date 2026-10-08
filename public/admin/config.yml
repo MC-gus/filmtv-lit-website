@@ -132,9 +132,7 @@ collections:
           - { label: 頁面標題, name: hero_title, widget: string }
           - { label: 理念區塊英文標題, name: philosophy_subtitle, widget: string }
           - { label: 理念標題, name: philosophy_title, widget: string }
-          - { label: 理念說明第一段, name: philosophy_p1, widget: text }
-          - { label: 理念說明第二段, name: philosophy_p2, widget: text }
-          - { label: 理念說明第三段, name: philosophy_p3, widget: text }
+          - { label: 理念說明, name: philosophy_text, widget: text, hint: "空一行＝新段落；只按一次 Enter＝段落內換行。段落數量自由決定" }
           - { label: 理念區塊圖片, name: philosophy_image, widget: image, required: false, hint: "顯示在理念文字右側，建議 4:3 比例" }
           - { label: 教育目標英文副標題, name: goals_subtitle, widget: string }
           - { label: 教育目標標題, name: goals_title, widget: string }

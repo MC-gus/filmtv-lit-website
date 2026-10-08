@@ -18,9 +18,12 @@ import data from '../content/settings/about.json';
       <div class="reveal-left">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">{data.philosophy_subtitle}</p>
         <h2 class="font-display text-4xl text-white mb-8 leading-tight">{data.philosophy_title}</h2>
-        <p class="text-film-light/60 leading-relaxed mb-6">{data.philosophy_p1}</p>
-        <p class="text-film-light/60 leading-relaxed mb-6">{data.philosophy_p2}</p>
-        <p class="text-film-light/60 leading-relaxed">{data.philosophy_p3}</p>
+        <!-- 空一行分段，單一換行保留為段內換行 -->
+        <div class="space-y-6">
+          {(data.philosophy_text ?? '').split(/\n\s*\n/).filter((p: string) => p.trim()).map((p: string) => (
+            <p class="text-film-light/60 leading-relaxed whitespace-pre-line">{p.trim()}</p>
+          ))}
+        </div>
       </div>
       <div class="reveal-right relative">
         {data.philosophy_image ? (
