@@ -23,7 +23,8 @@ const {
   canonical,
 } = Astro.props;
 
-const siteUrl = 'https://steady-liger-986d40.netlify.app';
+// 網址統一在 astro.config.mjs 的 site 設定（換網域只要改那裡）
+const siteUrl = (Astro.site?.href ?? '').replace(/\/$/, '');
 const canonicalUrl = canonical ?? `${siteUrl}${Astro.url.pathname}`;
 const fullTitle = title.includes('影視傳播系') ? title : `${title} | 黎明技術學院 影視傳播系`;
 
@@ -87,9 +88,6 @@ const ogImageUrl = ogImage ? new URL(ogImage, siteUrl).href : '';
 
     <!-- 結構化資料 JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-
-    <!-- Netlify Identity Widget -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   </head>
   <body class="bg-film-black text-film-light font-sans">
     <Navbar />
@@ -98,23 +96,6 @@ const ogImageUrl = ogImage ? new URL(ogImage, siteUrl).href : '';
     </main>
     <Footer />
     <ScrollRail />
-
-    <!-- Netlify Identity：處理邀請/密碼重設 token -->
-    <script>
-      window.addEventListener('load', () => {
-        const identity = (window as any).netlifyIdentity;
-        if (!identity) return;
-        identity.on('init', (user: any) => {
-          if (!user) {
-            identity.on('login', () => { document.location.href = '/admin/'; });
-          }
-        });
-        const hash = window.location.hash;
-        if (hash.includes('invite_token') || hash.includes('recovery_token') || hash.includes('confirmation_token')) {
-          identity.open();
-        }
-      });
-    </script>
 
     <!-- GSAP + Lenis 平滑滾動 -->
     <script>

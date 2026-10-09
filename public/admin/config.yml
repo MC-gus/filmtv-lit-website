@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: MC-gus/filmtv-lit-website
   branch: main
+  # 登入服務在本站 /api/auth（functions/api/），base_url 由 admin/index.html 自動帶入目前網域
+  auth_endpoint: api/auth
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
