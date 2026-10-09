@@ -4,24 +4,24 @@
 ---
 
 <!-- 刻度尺：跟著捲動滑動，點擊可跳到該位置 -->
-<div id="rail" class="hidden lg:block fixed top-0 right-0 bottom-0 w-14 z-40 cursor-crosshair select-none overflow-hidden bg-film-black/80 backdrop-blur-sm border-l border-white/10" aria-hidden="true">
+<div id="rail" class="hidden lg:block fixed top-0 right-0 bottom-0 w-9 z-40 cursor-crosshair select-none overflow-hidden opacity-60 hover:opacity-100 transition-opacity duration-300" aria-hidden="true">
   <div id="rail-strip" class="absolute inset-x-0 top-0 will-change-transform"></div>
-  <div id="rail-ghost" class="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none opacity-0 transition-opacity">
-    <span id="rail-ghost-pct" class="absolute right-1 -top-4 text-[9px] font-mono text-white/60"></span>
+  <div id="rail-ghost" class="absolute right-0 top-0 w-6 h-px bg-white/50 pointer-events-none opacity-0 transition-opacity">
+    <span id="rail-ghost-pct" class="absolute right-0 -top-3.5 text-[8px] font-mono text-white/60"></span>
   </div>
-  <div id="rail-marker" class="absolute inset-x-0 top-0 h-px bg-film-gold pointer-events-none will-change-transform">
-    <span id="rail-pct" class="absolute right-1 -top-4 text-[10px] font-mono text-film-gold tracking-wider">000%</span>
+  <div id="rail-marker" class="absolute right-0 top-0 w-6 h-px bg-film-gold pointer-events-none will-change-transform">
+    <span id="rail-pct" class="absolute right-0 -top-3.5 text-[9px] font-mono text-film-gold">000%</span>
   </div>
 </div>
 
 <!-- 目前段落標題（字母會從右下清單飛上來） -->
-<div class="hidden xl:block fixed right-24 top-24 z-40 pointer-events-none text-right" aria-hidden="true">
+<div class="hidden xl:block fixed right-14 top-24 z-40 pointer-events-none text-right" aria-hidden="true">
   <p id="rail-index" class="font-mono text-[10px] tracking-[0.3em] text-film-gold/70 mb-2"></p>
   <p id="rail-current" class="font-display text-3xl font-bold tracking-[0.2em] text-white/90 whitespace-nowrap"></p>
 </div>
 
 <!-- 接下來的段落 -->
-<nav id="rail-list" class="hidden xl:flex fixed right-24 bottom-10 z-40 flex-col items-end gap-1.5" aria-label="本頁段落"></nav>
+<nav id="rail-list" class="hidden xl:flex fixed right-14 bottom-10 z-40 flex-col items-end gap-1.5" aria-label="本頁段落"></nav>
 
 <script>
   import { gsap } from 'gsap';
@@ -46,12 +46,12 @@
   for (let i = 0; i <= 100; i++) {
     const major = i % 5 === 0;
     const tick = document.createElement('div');
-    tick.className = `absolute left-0 h-px ${major ? 'w-4 bg-white/40' : 'w-2 bg-white/15'}`;
+    tick.className = `absolute right-0 h-px ${major ? 'w-3 bg-white/30' : 'w-1.5 bg-white/15'}`;
     tick.style.top = `${i * SP}px`;
     strip.appendChild(tick);
     if (major) {
       const num = document.createElement('span');
-      num.className = 'absolute left-6 -translate-y-1/2 text-[9px] font-mono text-white/35';
+      num.className = 'absolute right-4 -translate-y-1/2 text-[8px] font-mono text-white/30';
       num.style.top = `${i * SP}px`;
       num.textContent = String(i);
       strip.appendChild(num);
