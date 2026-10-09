@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   // 網站正式網址：之後換成學校網域時只要改這一行
-  site: 'https://filmtv-lit.pages.dev',
+  site: 'https://filmtv-lit-website.pages.dev',
   integrations: [
     tailwind(),
     sitemap(),
