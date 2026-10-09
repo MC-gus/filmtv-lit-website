@@ -12,7 +12,7 @@ import data from '../content/settings/admission.json';
 
   <PageHero subtitle={data.hero_subtitle} title={data.hero_title} image={data.hero_image} />
 
-  <section class="py-24 px-6">
+  <section data-section="入學管道" class="py-24 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="mb-16 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">How to Apply</p>
@@ -42,7 +42,7 @@ import data from '../content/settings/admission.json';
     </div>
   </section>
 
-  <section class="py-24 px-6 bg-film-gray">
+  <section data-section="常見問題" class="py-24 px-6 bg-film-gray">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-16 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.faq_subtitle}</p>
@@ -62,7 +62,7 @@ import data from '../content/settings/admission.json';
     </div>
   </section>
 
-  <section class="py-24 px-6">
+  <section data-section="聯絡我們" class="py-24 px-6">
     <div class="max-w-3xl mx-auto text-center reveal">
       <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">{data.contact_subtitle}</p>
       <h2 class="font-display text-4xl text-white mb-8">{data.contact_title}</h2>

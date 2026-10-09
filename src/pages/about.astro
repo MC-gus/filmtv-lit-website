@@ -13,7 +13,7 @@ import data from '../content/settings/about.json';
   <PageHero subtitle={data.hero_subtitle} title={data.hero_title} image={data.hero_image} />
 
   <!-- 系所理念 -->
-  <section class="py-24 px-6">
+  <section data-section="教學理念" class="py-24 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
       <div class="reveal-left">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-6">{data.philosophy_subtitle}</p>
@@ -45,7 +45,7 @@ import data from '../content/settings/about.json';
   </section>
 
   <!-- 教育目標 -->
-  <section class="py-24 px-6 bg-film-gray">
+  <section data-section="教育目標" class="py-24 px-6 bg-film-gray">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.goals_subtitle}</p>
@@ -71,7 +71,7 @@ import data from '../content/settings/about.json';
   </section>
 
   <!-- 歷史沿革 -->
-  <section class="py-24 px-6">
+  <section data-section="歷史沿革" class="py-24 px-6">
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-16 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.history_subtitle}</p>

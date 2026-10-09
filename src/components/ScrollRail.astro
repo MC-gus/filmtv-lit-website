@@ -1,0 +1,146 @@
+---
+// 右側捲動互動：刻度尺（電腦版）＋目前段落標題與段落清單（大螢幕）
+// 段落名稱來自頁面上 <section data-section="名稱">
+---
+
+<!-- 刻度尺：跟著捲動滑動，點擊可跳到該位置 -->
+<div id="rail" class="hidden lg:block fixed top-0 right-0 bottom-0 w-14 z-40 cursor-crosshair select-none overflow-hidden bg-film-black/80 backdrop-blur-sm border-l border-white/10" aria-hidden="true">
+  <div id="rail-strip" class="absolute inset-x-0 top-0 will-change-transform"></div>
+  <div id="rail-ghost" class="absolute inset-x-0 top-0 h-px bg-white/40 pointer-events-none opacity-0 transition-opacity">
+    <span id="rail-ghost-pct" class="absolute right-1 -top-4 text-[9px] font-mono text-white/60"></span>
+  </div>
+  <div id="rail-marker" class="absolute inset-x-0 top-0 h-px bg-film-gold pointer-events-none will-change-transform">
+    <span id="rail-pct" class="absolute right-1 -top-4 text-[10px] font-mono text-film-gold tracking-wider">000%</span>
+  </div>
+</div>
+
+<!-- 目前段落標題（字母會從右下清單飛上來） -->
+<div class="hidden xl:block fixed right-24 top-24 z-40 pointer-events-none text-right" aria-hidden="true">
+  <p id="rail-index" class="font-mono text-[10px] tracking-[0.3em] text-film-gold/70 mb-2"></p>
+  <p id="rail-current" class="font-display text-3xl font-bold tracking-[0.2em] text-white/90 whitespace-nowrap"></p>
+</div>
+
+<!-- 接下來的段落 -->
+<nav id="rail-list" class="hidden xl:flex fixed right-24 bottom-10 z-40 flex-col items-end gap-1.5" aria-label="本頁段落"></nav>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const SP = 10; // 每 1% 刻度的間距（px）
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scrollToY = (y: number) => {
+    const lenis = (window as any).__lenis;
+    lenis ? lenis.scrollTo(y) : window.scrollTo({ top: y, behavior: 'smooth' });
+  };
+  const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  const clamp = (n: number) => Math.min(1, Math.max(0, n));
+
+  // ── 刻度尺 ──
+  const rail = document.getElementById('rail')!;
+  const strip = document.getElementById('rail-strip')!;
+  const marker = document.getElementById('rail-marker')!;
+  const pctEl = document.getElementById('rail-pct')!;
+  const ghost = document.getElementById('rail-ghost')!;
+  const ghostPct = document.getElementById('rail-ghost-pct')!;
+
+  for (let i = 0; i <= 100; i++) {
+    const major = i % 5 === 0;
+    const tick = document.createElement('div');
+    tick.className = `absolute left-0 h-px ${major ? 'w-4 bg-white/40' : 'w-2 bg-white/15'}`;
+    tick.style.top = `${i * SP}px`;
+    strip.appendChild(tick);
+    if (major) {
+      const num = document.createElement('span');
+      num.className = 'absolute left-6 -translate-y-1/2 text-[9px] font-mono text-white/35';
+      num.style.top = `${i * SP}px`;
+      num.textContent = String(i);
+      strip.appendChild(num);
+    }
+  }
+
+  let progress = 0;
+  const markerY = (p: number) => 96 + p * (innerHeight - 192);
+  const fmt = (p: number) => `${String(Math.round(p * 100)).padStart(3, '0')}%`;
+  const pctAt = (clientY: number) => clamp(progress + (clientY - markerY(progress)) / SP / 100);
+
+  function updateRail() {
+    progress = clamp(scrollY / maxScroll());
+    const y = markerY(progress);
+    marker.style.transform = `translateY(${y}px)`;
+    strip.style.transform = `translateY(${y - progress * 100 * SP}px)`;
+    pctEl.textContent = fmt(progress);
+  }
+
+  rail.addEventListener('mousemove', (e) => {
+    ghost.style.opacity = '1';
+    ghost.style.transform = `translateY(${e.clientY}px)`;
+    ghostPct.textContent = fmt(pctAt(e.clientY));
+  });
+  rail.addEventListener('mouseleave', () => { ghost.style.opacity = '0'; });
+  rail.addEventListener('click', (e) => scrollToY(pctAt(e.clientY) * maxScroll()));
+
+  // ── 段落標題與清單 ──
+  const sections = [...document.querySelectorAll<HTMLElement>('[data-section]')];
+  const titleEl = document.getElementById('rail-current')!;
+  const indexEl = document.getElementById('rail-index')!;
+  const listEl = document.getElementById('rail-list')!;
+  let current = -1;
+
+  const items = sections.map((sec, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = sec.dataset.section ?? '';
+    btn.className = 'text-sm font-bold tracking-[0.3em] text-white/30 hover:text-film-gold transition-colors';
+    btn.addEventListener('click', () => scrollToY(sec.getBoundingClientRect().top + scrollY - 80));
+    listEl.appendChild(btn);
+    return btn;
+  });
+
+  function setCurrent(i: number) {
+    if (i === current) return;
+    const goingDown = i > current;
+    const fromRect = items[i]?.offsetParent ? items[i].getBoundingClientRect() : null;
+    current = i;
+    items.forEach((btn, k) => { btn.style.display = k > i ? '' : 'none'; });
+
+    indexEl.textContent = `${String(i + 1).padStart(2, '0')} / ${String(sections.length).padStart(2, '0')}`;
+    titleEl.replaceChildren(...[...(sections[i].dataset.section ?? '')].map((ch) => {
+      const s = document.createElement('span');
+      s.className = 'inline-block';
+      s.textContent = ch === ' ' ? ' ' : ch;
+      return s;
+    }));
+    if (reduced) return;
+
+    // 每個字從清單位置（或畫面外）旋轉飛進標題
+    [...titleEl.children].forEach((letter, k) => {
+      const r = letter.getBoundingClientRect();
+      const fromX = fromRect && goingDown ? fromRect.left + k * 14 - r.left : gsap.utils.random(-40, 120);
+      const fromY = fromRect && goingDown ? fromRect.top - r.top : goingDown ? innerHeight * 0.6 : -160;
+      gsap.fromTo(letter,
+        { x: fromX, y: fromY, rotation: gsap.utils.random(-220, 220), opacity: 0, scale: 0.5 },
+        { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1, duration: 0.9, delay: k * 0.06, ease: 'power3.out' });
+    });
+  }
+
+  function updateSection() {
+    if (!sections.length) return;
+    let idx = 0;
+    // 還在頁面最上方時固定顯示第一段（頁首橫幅較矮時，下一段會太早觸發）
+    if (scrollY > 40) {
+      sections.forEach((sec, i) => { if (sec.getBoundingClientRect().top <= innerHeight * 0.45) idx = i; });
+    }
+    setCurrent(idx);
+  }
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { updateRail(); updateSection(); ticking = false; });
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  updateRail();
+  updateSection();
+</script>

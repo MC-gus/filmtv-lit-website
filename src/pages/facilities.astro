@@ -18,7 +18,7 @@ import data from '../content/settings/facilities.json';
     </div>
   </section>
 
-  <section class="py-12 px-6">
+  <section data-section="設備介紹" class="py-12 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {data.facilities.map((item, i) => (
         <div class="reveal border border-white/10 hover:border-film-gold group transition-colors duration-300 flex flex-col"
@@ -44,7 +44,7 @@ import data from '../content/settings/facilities.json';
     </div>
   </section>
 
-  <section class="py-24 px-6 bg-film-gray">
+  <section data-section="歡迎參觀" class="py-24 px-6 bg-film-gray">
     <div class="max-w-3xl mx-auto text-center reveal">
       <h2 class="font-display text-3xl text-white mb-6">{data.cta_title}</h2>
       <p class="text-film-light/60 mb-10 leading-relaxed">{data.cta_desc}</p>

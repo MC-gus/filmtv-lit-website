@@ -18,7 +18,7 @@ import data from '../content/settings/curriculum.json';
     </div>
   </section>
 
-  <section class="py-12 px-6">
+  <section data-section="四年課程" class="py-12 px-6">
     <div class="max-w-7xl mx-auto space-y-6">
       {data.years.map((year, i) => (
         <div class="reveal border border-white/10 hover:border-film-gold/50 transition-colors duration-300"
@@ -44,7 +44,7 @@ import data from '../content/settings/curriculum.json';
     </div>
   </section>
 
-  <section class="py-24 px-6 bg-film-gray">
+  <section data-section="特色學習" class="py-24 px-6 bg-film-gray">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-16 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">{data.features_subtitle}</p>

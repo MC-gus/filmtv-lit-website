@@ -22,7 +22,7 @@ const ytSrc = ytId
 >
 
   <!-- ===== HERO ===== -->
-  <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+  <section data-section="影視傳播系" id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
     <!-- 背景：後台有上傳影片就播影片，否則用圖片，都沒有就是深色漸層 -->
     <div class="absolute inset-0 bg-gradient-to-br from-film-black via-film-gray to-film-black">
       {home.hero_image && (ytSrc || !home.hero_video) && (
@@ -86,7 +86,7 @@ const ytSrc = ytId
   </section>
 
   <!-- ===== 關於系所 ===== -->
-  <section class="py-32 px-6">
+  <section data-section="關於我們" class="py-32 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
         <div class="reveal-left">
@@ -114,7 +114,7 @@ const ytSrc = ytId
   </section>
 
   <!-- ===== 三大特色 ===== -->
-  <section class="py-32 px-6 bg-film-gray">
+  <section data-section="學習優勢" class="py-32 px-6 bg-film-gray">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-20 reveal">
         <p class="text-film-gold text-xs tracking-[0.4em] uppercase mb-4">What We Offer</p>
@@ -142,7 +142,7 @@ const ytSrc = ytId
   </section>
 
   <!-- ===== 最新消息 ===== -->
-  <section class="py-32 px-6">
+  <section data-section="最新消息" class="py-32 px-6">
     <div class="max-w-7xl mx-auto">
       <div class="flex items-end justify-between mb-16 reveal">
         <div>
@@ -202,7 +202,7 @@ const ytSrc = ytId
   </section>
 
   <!-- ===== 招生 CTA ===== -->
-  <section class="py-40 px-6 bg-film-gray relative overflow-hidden">
+  <section data-section="加入我們" class="py-40 px-6 bg-film-gray relative overflow-hidden">
     {home.cta_image && (
       <>
         <img src={home.cta_image} alt="" class="absolute inset-0 w-full h-full object-cover opacity-30" />
