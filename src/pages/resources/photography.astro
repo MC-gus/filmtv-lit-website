@@ -1,0 +1,318 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import LabSlider from '../../components/LabSlider.astro';
+
+const sections = [
+  { id: 'exposure', no: '01', name: '曝光三角' },
+  { id: 'dof', no: '02', name: '光圈與景深' },
+  { id: 'shutter', no: '03', name: '快門與動態模糊' },
+  { id: 'iso', no: '04', name: 'ISO 與雜訊' },
+  { id: 'focal', no: '05', name: '焦段與視角' },
+  { id: 'breathing', no: '06', name: '呼吸效應' },
+];
+const missions = ['自由練習', '凍結飛馳的單車', '奶油散景人像', '夜市手持不手震', '拍出速度感'];
+---
+
+<BaseLayout
+  title="基礎攝影互動教室 | 影視傳播系"
+  description="用互動模擬學會攝影基礎：光圈、快門、ISO 的曝光三角，景深、動態模糊、雜訊、焦段視角與對焦呼吸效應，拖動滑桿就能看到畫面變化。"
+  keywords="攝影教學,曝光三角,光圈,快門,ISO,景深,動態模糊,焦段,呼吸效應,攝影入門,互動教學"
+>
+  <PageHero subtitle="Interactive Photography Lab" title="基礎攝影互動教室" />
+
+  <section class="pb-12 px-6 -mt-6">
+    <div class="max-w-6xl mx-auto">
+      <p class="text-film-light/60 max-w-3xl leading-relaxed text-lg mb-8">
+        不用相機也能練習。拖動滑桿，畫面會依真實的光學原理即時改變：
+        看光圈怎麼讓背景散開、快門怎麼凍結或拉長動作、ISO 怎麼換來亮度也換來雜訊。
+      </p>
+      <nav class="flex flex-wrap gap-2" aria-label="章節">
+        {sections.map((s) => (
+          <a href={`#${s.id}`} class="lab-chip"><span class="font-mono text-film-gold/70 mr-2">{s.no}</span>{s.name}</a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <!-- ===== 01 曝光三角 ===== -->
+  <section id="exposure" data-section="曝光三角" class="lab-section">
+    <div class="max-w-6xl mx-auto" data-lab="exposure">
+      <header class="lab-head">
+        <span class="lab-no">01</span>
+        <div>
+          <h2 class="lab-title">曝光三角：光圈 × 快門 × ISO</h2>
+          <p class="lab-lead">照片的亮度由三個設定一起決定。任何一個調亮一級，另一個就要調暗一級，才能維持同樣的曝光；但每個設定都會帶來不同的「副作用」。</p>
+        </div>
+      </header>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        {missions.map((m, i) => (
+          <button type="button" data-mission={i} class:list={['lab-chip', { 'lab-chip-on': i === 0 }]}>{i === 0 ? m : `任務 ${i}｜${m}`}</button>
+        ))}
+      </div>
+
+      <div class="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div>
+          <div class="lab-scene" data-scene></div>
+          <div class="mt-4">
+            <div class="relative h-2 rounded-full bg-gradient-to-r from-black via-film-gray to-white/80">
+              <div data-needle class="absolute -top-1.5 w-1 h-5 bg-film-gold rounded transition-[left] duration-200" style="left:50%"></div>
+            </div>
+            <div class="flex justify-between text-[11px] font-mono text-film-light/40 mt-1"><span>-3</span><span>-2</span><span>-1</span><span>0</span><span>+1</span><span>+2</span><span>+3</span></div>
+            <p class="mt-2 text-sm"><span class="font-mono text-film-gold mr-2" data-out="ev"></span><span class="text-film-light/80" data-out="status"></span></p>
+            <p class="text-sm text-red-300 mt-1" data-out="shake"></p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <LabSlider name="aperture" label="光圈" min={0} max={8} value={5} left="大光圈・背景模糊" right="小光圈・前後清楚" />
+          <LabSlider name="shutter" label="快門" min={0} max={12} value={5} left="快・凍結動作" right="慢・動態模糊" />
+          <LabSlider name="iso" label="ISO 感光度" min={0} max={7} value={0} left="低・畫質乾淨" right="高・雜訊變多" />
+          <label class="flex items-center gap-3 text-sm text-film-light/70 cursor-pointer">
+            <input type="checkbox" data-ctl="tripod" class="w-4 h-4 accent-film-gold" /> 使用腳架（慢快門也不會手震）
+          </label>
+          <div class="border border-white/10 p-5">
+            <p class="text-xs tracking-widest text-film-gold/80 mb-2">任務說明</p>
+            <p class="text-sm text-film-light/70 leading-relaxed mb-3" data-out="mission-desc"></p>
+            <ul class="space-y-1.5 text-sm" data-checks></ul>
+            <p data-done class="hidden mt-4 text-film-gold font-bold">🎬 任務完成！換下一關試試看</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lab-notes">
+        <div><h3>光圈（f 值）</h3><p>數字越小、開口越大、進光越多，背景越模糊。f/1.4 到 f/2 是一級，每一級光量差一倍。</p></div>
+        <div><h3>快門</h3><p>感光元件接收光線的時間。1/1000 秒能凍結動作，1/30 秒以下拍移動物體會出現拖影。</p></div>
+        <div><h3>ISO</h3><p>把訊號放大。ISO 200 是 100 的兩倍亮，但放大的同時雜訊也一起變多。</p></div>
+        <div><h3>安全快門</h3><p>手持拍攝時，快門最好快於「1 / 焦段」秒。用 50mm 時，至少要 1/50 秒左右才不容易手震。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 光圈與景深 ===== -->
+  <section id="dof" data-section="光圈與景深" class="lab-section bg-film-gray">
+    <div class="max-w-6xl mx-auto" data-lab="dof">
+      <header class="lab-head">
+        <span class="lab-no">02</span>
+        <div>
+          <h2 class="lab-title">光圈與景深：清晰範圍有多深？</h2>
+          <p class="lab-lead">「景深」是畫面中看起來清楚的前後範圍。光圈越大、焦段越長、對焦越近，景深就越淺，主體以外越模糊。</p>
+        </div>
+      </header>
+      <div class="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div>
+          <div class="lab-scene" data-scene></div>
+          <div class="mt-6">
+            <p class="text-xs text-film-light/50 mb-2">距離尺（俯視）：金色區域是清楚的範圍</p>
+            <div class="relative h-8 border-b border-white/20">
+              <div data-band class="absolute bottom-0 h-full bg-film-gold/25 border-x border-film-gold transition-all duration-150"></div>
+              <div data-focus-mark class="absolute bottom-0 h-full w-0.5 bg-film-gold transition-all duration-150"></div>
+            </div>
+            <div class="relative h-5 mt-1" data-marks></div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <LabSlider name="aperture" label="光圈" min={0} max={8} value={0} left="f/1.4" right="f/22" />
+          <LabSlider name="focal" label="焦段" min={24} max={135} value={50} left="廣角" right="望遠" />
+          <LabSlider name="focus" label="對焦距離" min={0} max={100} step={0.5} value={49} left="近" right="遠" />
+          <div class="border border-white/10 p-5 space-y-1">
+            <p class="text-xs tracking-widest text-film-gold/80">清晰範圍</p>
+            <p class="font-mono text-2xl text-white" data-out="range"></p>
+            <p class="text-sm text-film-light/60" data-out="depth"></p>
+          </div>
+        </div>
+      </div>
+      <div class="lab-notes">
+        <div><h3>想要背景模糊</h3><p>開大光圈（f/1.4–f/2.8）、用長焦段、靠近主體，並讓背景離主體遠一點。</p></div>
+        <div><h3>想要前後都清楚</h3><p>縮小光圈（f/8–f/16）、用廣角，對焦在畫面約前三分之一的位置。</p></div>
+        <div><h3>試試看</h3><p>把對焦拉到最遠：光圈縮到 f/8 以上時，清晰範圍會一路延伸到「∞」無限遠，這就是「超焦距」。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 快門與動態模糊 ===== -->
+  <section id="shutter" data-section="快門速度" class="lab-section">
+    <div class="max-w-6xl mx-auto" data-lab="shutter">
+      <header class="lab-head">
+        <span class="lab-no">03</span>
+        <div>
+          <h2 class="lab-title">快門與動態模糊：凍結，還是流動？</h2>
+          <p class="lab-lead">快門開著的那段時間裡，物體移動了多遠，畫面上就會拉出多長的模糊。這裡相機會自動補償亮度，讓你專心觀察模糊。</p>
+        </div>
+      </header>
+      <div class="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div>
+          <div class="lab-scene" data-scene></div>
+          <p class="mt-4 text-film-light/80" data-out="verdict"></p>
+        </div>
+        <div class="space-y-6">
+          <LabSlider name="shutter" label="快門" min={0} max={12} value={6} left="1/4000" right='1"' />
+          <label class="flex items-center gap-3 text-sm text-film-light/70 cursor-pointer">
+            <input type="checkbox" data-ctl="pan" class="w-4 h-4 accent-film-gold" /> 追焦（相機跟著騎士一起轉動）
+          </label>
+          <div class="border border-white/10 p-5 space-y-1">
+            <p class="text-xs tracking-widest text-film-gold/80">快門打開的這段時間</p>
+            <p class="text-sm text-film-light/70">時速 20 公里的單車移動了</p>
+            <p class="font-mono text-2xl text-white" data-out="travel"></p>
+          </div>
+        </div>
+      </div>
+      <div class="lab-notes">
+        <div><h3>凍結動作</h3><p>運動、舞蹈、水花：1/500 到 1/2000 秒。</p></div>
+        <div><h3>表現速度感</h3><p>架腳架用 1/15 到 1/2 秒，讓移動的部分拖出軌跡，靜止的部分保持清楚。</p></div>
+        <div><h3>追焦</h3><p>用 1/30 到 1/60 秒，鏡頭跟著主體一起移動：主體清楚、背景變成速度線。</p></div>
+        <div><h3>錄影的快門</h3><p>錄影常用「180 度快門」：快門約為影格率的兩倍分之一，例如 24fps 用 1/50 秒，動作看起來最自然。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 ISO ===== -->
+  <section id="iso" data-section="ISO 雜訊" class="lab-section bg-film-gray">
+    <div class="max-w-6xl mx-auto" data-lab="iso">
+      <header class="lab-head">
+        <span class="lab-no">04</span>
+        <div>
+          <h2 class="lab-title">ISO 與雜訊：亮度的代價</h2>
+          <p class="lab-lead">夜晚光線不足，光圈已經開到 f/2.8、快門也不能再慢（1/60），只剩 ISO 能把畫面拉亮。注意畫面上的顆粒。</p>
+        </div>
+      </header>
+      <div class="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div>
+          <div class="lab-scene" data-scene></div>
+          <div class="mt-4">
+            <div class="relative h-2 rounded-full bg-gradient-to-r from-black via-film-black to-white/80">
+              <div data-needle class="absolute -top-1.5 w-1 h-5 bg-film-gold rounded transition-[left] duration-200" style="left:50%"></div>
+            </div>
+            <p class="mt-3 text-sm"><span class="font-mono text-film-gold mr-2" data-out="ev"></span><span class="text-film-light/80" data-out="status"></span></p>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <LabSlider name="iso" label="ISO 感光度" min={0} max={7} value={0} left="100" right="12800" />
+          <div class="border border-white/10 p-5 space-y-2 text-sm">
+            <p class="text-film-light/50">固定設定：f/2.8・1/60 秒</p>
+            <p class="text-xs tracking-widest text-film-gold/80 pt-2">畫質</p>
+            <p class="text-film-light/80" data-out="grain"></p>
+          </div>
+        </div>
+      </div>
+      <div class="lab-notes">
+        <div><h3>原則</h3><p>先用光圈和快門解決，真的不夠亮才提高 ISO。</p></div>
+        <div><h3>寧可正確曝光</h3><p>用低 ISO 拍得太暗再後製拉亮，雜訊往往比一開始就用高 ISO 更嚴重。</p></div>
+        <div><h3>原生 ISO</h3><p>許多攝影機有「原生 ISO」（例如 800 或 3200），在這個數值附近畫質最好，拍片前可以查一下規格。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 焦段 ===== -->
+  <section id="focal" data-section="焦段視角" class="lab-section">
+    <div class="max-w-6xl mx-auto" data-lab="focal">
+      <header class="lab-head">
+        <span class="lab-no">05</span>
+        <div>
+          <h2 class="lab-title">焦段與視角：看得多寬，還是拉得多近？</h2>
+          <p class="lab-lead">焦段越短視角越寬，越長就像望遠鏡。切換到「推軌變焦」：相機一邊後退、一邊拉長焦段，讓人物大小不變，看看背景怎麼被「拉近」。</p>
+        </div>
+      </header>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button type="button" data-mode="zoom" class="lab-chip lab-chip-on">站著不動・變焦</button>
+        <button type="button" data-mode="dolly" class="lab-chip">推軌變焦（Dolly Zoom）</button>
+      </div>
+      <div class="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div class="lab-scene" data-scene></div>
+        <div class="space-y-6">
+          <LabSlider name="focal" label="焦段" min={24} max={200} value={50} left="24mm 廣角" right="200mm 望遠" />
+          <div class="border border-white/10 p-5 flex items-center gap-5">
+            <svg viewBox="0 0 200 185" class="w-28 shrink-0" aria-hidden="true">
+              <path data-cone fill="rgba(201,168,76,.25)" stroke="#c9a84c" stroke-width="1.5"></path>
+              <rect x="90" y="170" width="20" height="12" rx="2" fill="#f0ede8"></rect>
+            </svg>
+            <div class="space-y-1">
+              <p class="text-xs tracking-widest text-film-gold/80">水平視角</p>
+              <p class="font-mono text-2xl text-white"><span data-out="fov"></span> <span class="text-sm text-film-light/60" data-out="type"></span></p>
+              <p class="text-xs text-film-light/50 hidden" data-dolly-only data-out="distance"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lab-notes">
+        <div><h3>廣角 16–35mm</h3><p>能拍進大場景，空間感強，但太靠近人臉會變形。</p></div>
+        <div><h3>標準 50mm</h3><p>接近人眼看到的透視感，畫面自然。</p></div>
+        <div><h3>望遠 85mm 以上</h3><p>畫面「壓縮」：背景看起來離主體更近、更大，適合人像與特寫。</p></div>
+        <div><h3>推軌變焦</h3><p>電影《迷魂記》《大白鯊》的經典鏡頭，用背景的劇烈變化表現角色的心理衝擊。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 06 呼吸效應 ===== -->
+  <section id="breathing" data-section="呼吸效應" class="lab-section bg-film-gray">
+    <div class="max-w-6xl mx-auto" data-lab="breathing">
+      <header class="lab-head">
+        <span class="lab-no">06</span>
+        <div>
+          <h2 class="lab-title">呼吸效應：對焦時畫面在「呼吸」</h2>
+          <p class="lab-lead">很多鏡頭在改變對焦距離時，視角會跟著輕微變大或變小，畫面像在呼吸。拍照不明顯，但錄影跟焦時會很干擾。電影鏡頭特別設計來壓低這個現象。</p>
+        </div>
+      </header>
+      <div class="flex flex-wrap gap-2 mb-6">
+        <button type="button" data-lens="photo" class="lab-chip lab-chip-on">一般相機鏡頭</button>
+        <button type="button" data-lens="cine" class="lab-chip">電影鏡頭（抑制呼吸）</button>
+      </div>
+      <div class="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div class="relative">
+          <div class="lab-scene" data-scene></div>
+          <!-- 固定參考框：用來比較畫面大小的變化 -->
+          <div class="pointer-events-none absolute inset-0">
+            <div class="absolute inset-[8%] border border-dashed border-white/50"></div>
+            <div class="absolute left-1/2 top-[66.7%] w-6 h-px -translate-x-1/2 bg-white/60"></div>
+            <div class="absolute left-1/2 top-[66.7%] w-px h-6 -translate-y-1/2 bg-white/60"></div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <LabSlider name="focus" label="對焦距離" min={0} max={100} step={0.2} value={36} left="0.8 m" right="30 m" />
+          <button type="button" data-rack class="lab-chip w-full justify-center">▶ 自動拉焦</button>
+          <div class="border border-white/10 p-5 space-y-1">
+            <p class="text-xs tracking-widest text-film-gold/80">和對焦無限遠時相比</p>
+            <p class="font-mono text-2xl text-white" data-out="zoom"></p>
+            <p class="text-sm text-film-light/60">注意虛線框和畫面邊緣的距離</p>
+          </div>
+        </div>
+      </div>
+      <div class="lab-notes">
+        <div><h3>為什麼會呼吸</h3><p>對焦時鏡片組前後移動，改變了實際焦距，視角就跟著變。</p></div>
+        <div><h3>什麼時候要在意</h3><p>錄影「拉焦」（Rack Focus）把焦點從前景換到背景時，觀眾會察覺畫面忽大忽小。</p></div>
+        <div><h3>怎麼避免</h3><p>使用電影鏡頭或標示「低呼吸」的鏡頭；部分相機也有「呼吸補償」功能，會用輕微裁切抵銷。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-section="繼續學習" class="py-24 px-6 text-center">
+    <h2 class="font-display text-3xl text-white mb-4">準備好拿起真的相機了嗎？</h2>
+    <p class="text-film-light/60 mb-10">把這裡學到的設定帶到現場試拍，比較模擬和實拍的差別。</p>
+    <a href="/resources" class="inline-block px-10 py-4 border border-film-gold text-film-gold text-sm tracking-widest hover:bg-film-gold hover:text-film-black transition-colors">回到教學資源</a>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .lab-section { padding: 6rem 1.5rem; scroll-margin-top: 6.5rem; }
+  .lab-head { display: flex; gap: 1.5rem; align-items: flex-start; margin-bottom: 2.5rem; }
+  .lab-no { font-family: ui-monospace, monospace; font-size: 2.5rem; line-height: 1; color: rgb(201 168 76 / 0.35); }
+  @media (max-width: 640px) { .lab-head { flex-direction: column; gap: .5rem; } .lab-no { font-size: 1.5rem; } }
+  .lab-title { font-family: 'Noto Serif TC', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); color: #fff; font-weight: 700; margin-bottom: .75rem; }
+  .lab-lead { color: rgb(240 237 232 / 0.6); line-height: 1.8; max-width: 48rem; }
+  .lab-scene { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgb(255 255 255 / 0.1); background: #000; }
+  .lab-chip { display: inline-flex; align-items: center; padding: .5rem 1rem; font-size: .85rem; border: 1px solid rgb(255 255 255 / 0.15); color: rgb(240 237 232 / 0.7); transition: all .2s; }
+  .lab-chip:hover { border-color: #c9a84c; color: #c9a84c; }
+  .lab-chip-on { border-color: #c9a84c; background: rgb(201 168 76 / 0.15); color: #c9a84c; }
+  .lab-notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1rem; margin-top: 3rem; }
+  .lab-notes > div { border: 1px solid rgb(255 255 255 / 0.1); padding: 1.25rem; }
+  .lab-notes h3 { color: #c9a84c; font-size: .9rem; font-weight: 700; margin-bottom: .5rem; }
+  .lab-notes p { color: rgb(240 237 232 / 0.6); font-size: .85rem; line-height: 1.7; }
+  /* 互動區右欄是控制面板：只保留右側刻度尺，隱藏段落標題與清單避免擋住滑桿 */
+  #rail-head, #rail-list { display: none !important; }
+</style>
+
+<script>
+  import { initPhotoLab } from '../../scripts/photo-lab';
+  initPhotoLab();
+</script>

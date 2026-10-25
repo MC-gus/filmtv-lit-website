@@ -1,0 +1,25 @@
+---
+// 互動教室用的滑桿：標籤＋即時數值＋兩端說明
+interface Props {
+  name: string;
+  label: string;
+  min: number;
+  max: number;
+  step?: number;
+  value: number;
+  left?: string;
+  right?: string;
+}
+const { name, label, min, max, step = 1, value, left, right } = Astro.props;
+---
+
+<label class="block">
+  <span class="flex items-baseline justify-between mb-2">
+    <span class="text-sm text-film-light/70">{label}</span>
+    <span class="font-mono text-lg text-film-gold" data-out={name}></span>
+  </span>
+  <input type="range" data-ctl={name} min={min} max={max} step={step} value={value} class="w-full accent-film-gold cursor-pointer" />
+  {(left || right) && (
+    <span class="flex justify-between text-[11px] text-film-light/40 mt-1"><span>{left}</span><span>{right}</span></span>
+  )}
+</label>

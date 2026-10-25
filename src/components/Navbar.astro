@@ -6,10 +6,12 @@ const navLinks = [
   { href: '/curriculum', label: '課程規劃' },
   { href: '/works', label: '作品預告' },
   { href: '/facilities', label: '設備環境' },
+  { href: '/resources', label: '教學資源' },
   { href: '/admission', label: '招生資訊' },
 ];
 
 const currentPath = Astro.url.pathname;
+const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
 ---
 
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500">
@@ -27,7 +29,7 @@ const currentPath = Astro.url.pathname;
           <a
             href={link.href}
             class={`text-sm tracking-wide transition-colors hover:text-film-gold ${
-              currentPath === link.href ? 'text-film-gold' : 'text-film-light/80'
+              isActive(link.href) ? 'text-film-gold' : 'text-film-light/80'
             }`}
           >
             {link.label}

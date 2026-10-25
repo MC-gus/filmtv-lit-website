@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+
+// 之後新增教學資源，在這裡多加一筆即可
+const resources = [
+  {
+    href: '/resources/photography',
+    tag: '互動教學',
+    title: '基礎攝影互動教室',
+    desc: '拖動滑桿學會光圈、快門、ISO 的曝光三角，以及景深、動態模糊、雜訊、焦段視角與呼吸效應，還有任務關卡可以挑戰。',
+    topics: ['曝光三角', '景深', '動態模糊', 'ISO', '焦段', '呼吸效應'],
+  },
+];
+---
+
+<BaseLayout
+  title="教學資源 | 影視傳播系"
+  description="黎明技術學院影視傳播系教學資源：互動式攝影教學與影視製作學習素材，讓學生隨時自主練習。"
+  keywords="影視教學資源,攝影教學,互動教學,影視製作學習"
+>
+  <PageHero subtitle="Learning Resources" title="教學資源" />
+
+  <section data-section="資源列表" class="pt-2 pb-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <p class="text-film-light/60 max-w-2xl leading-relaxed mb-12">
+        給同學課後自主練習的學習資源，持續增加中。
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resources.map((r) => (
+          <a href={r.href} class="reveal group block border border-white/10 hover:border-film-gold transition-colors duration-300 p-8">
+            <span class="inline-block text-xs border border-film-gold/50 text-film-gold px-3 py-1 mb-6">{r.tag}</span>
+            <h2 class="font-display text-2xl text-white mb-4 group-hover:text-film-gold transition-colors">{r.title}</h2>
+            <p class="text-film-light/60 text-sm leading-relaxed mb-6">{r.desc}</p>
+            <div class="flex flex-wrap gap-2 mb-6">
+              {r.topics.map((t) => <span class="text-xs text-film-light/50 bg-white/5 px-2 py-1">{t}</span>)}
+            </div>
+            <span class="text-film-gold text-xs tracking-widest">開始學習 →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
