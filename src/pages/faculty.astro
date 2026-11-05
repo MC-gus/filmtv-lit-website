@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 import pageData from '../content/settings/faculty.json';
 
 const allFaculty = await getCollection('faculty').catch(() => []);
-const faculty = allFaculty.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+const faculty = allFaculty.filter((t) => !t.data.hidden).sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 
 const allMentors = await getCollection('mentors').catch(() => []);
 const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
@@ -35,7 +35,7 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
         )}
         <div class="no-scrollbar flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-6 px-6 md:mx-0 md:px-0 pb-2">
           {faculty.map((person, i) => (
-            <div class="reveal group shrink-0 w-[80%] md:w-auto snap-center border border-white/10 hover:border-film-gold transition-all duration-300 p-6 md:p-8"
+            <a href={`/faculty/${person.slug ?? person.id}`} class="reveal group block shrink-0 w-[80%] md:w-auto snap-center border border-white/10 hover:border-film-gold transition-all duration-300 p-6 md:p-8"
                  style={`transition-delay: ${i * 80}ms`}>
               <!-- 照片或首字佔位 -->
               {person.data.photo ? (
@@ -68,8 +68,9 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
               </h3>
               <p class="text-film-gold text-xs tracking-wide mb-1">{person.data.title}</p>
               <p class="text-film-light/40 text-xs mb-4 border-b border-white/10 pb-4">專長：{person.data.specialty}</p>
-              <p class="text-film-light/60 text-sm leading-relaxed">{person.data.bio}</p>
-            </div>
+              {person.data.bio && <p class="text-film-light/60 text-sm leading-relaxed line-clamp-4">{person.data.bio}</p>}
+              <span class="inline-block mt-4 text-film-gold text-xs tracking-widest">查看介紹 →</span>
+            </a>
           ))}
         </div>
       )}

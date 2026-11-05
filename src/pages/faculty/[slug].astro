@@ -1,0 +1,371 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('faculty').catch(() => []);
+  return all.filter((t) => !t.data.hidden).map((t) => ({ params: { slug: t.slug ?? t.id }, props: { teacher: t } }));
+}
+
+const t = Astro.props.teacher.data;
+const COLLAPSE_AT = 10; // 長清單預設顯示筆數，其餘按「顯示全部」展開
+
+// 欄目可在後台個別關閉；項目可個別隱藏；沒有資料的欄目不顯示
+const off: string[] = t.hidden_sections ?? [];
+const shown = <T extends { hidden?: boolean }>(key: string, list?: T[]) => (off.includes(key) ? [] : (list ?? []).filter((x) => !x.hidden));
+
+const works = shown('credits', t.works);
+const selected = off.includes('selected')
+  ? []
+  : (t.works ?? []).filter((w: any) => w.featured && !w.hidden).sort((a: any, b: any) => (a.featured_order ?? 99) - (b.featured_order ?? 99));
+const experience = shown('experience', t.experience);
+const awards = shown('awards', t.awards);
+const projects = shown('projects', t.projects);
+const papers = shown('papers', t.papers);
+const teaching = shown('teaching', t.teaching);
+const feedback = shown('feedback', t.feedback);
+const licenses: string[] = off.includes('licenses') ? [] : t.licenses ?? [];
+const services: string[] = off.includes('services') ? [] : t.services ?? [];
+const custom = (t.custom_sections ?? []).filter((s: any) => !s.hidden && s.items?.length);
+const paragraphs = off.includes('about') ? [] : (t.bio ?? '').split(/\n\s*\n/).filter((p: string) => p.trim());
+
+const paperGroups = [...new Set(papers.map((p: any) => p.category || '研究論文'))].map((c) => ({
+  name: c as string,
+  items: papers.filter((p: any) => (p.category || '研究論文') === c),
+}));
+const categories = [...new Set(works.map((w: any) => w.category).filter(Boolean))] as string[];
+
+const ytId = t.video?.url?.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
+const hasVideo = !!ytId && !off.includes('video');
+
+const workName = (w: any) => (w.descriptive ? w.title : `《${w.title}》`);
+const period = (e: any) => [e.start, e.current ? '至今' : e.end].filter(Boolean).join(' – ');
+const education: string[] = t.education ?? [];
+
+const jump = [
+  paragraphs.length && ['about', '簡介'],
+  selected.length && ['selected', '代表作品'],
+  works.length && ['credits', '作品列表'],
+  experience.length && ['experience', '經歷'],
+  awards.length && ['awards', '獲獎'],
+  projects.length && ['projects', '產學計畫'],
+  papers.length && ['papers', '研究論文'],
+  teaching.length && ['teaching', '教學指導'],
+  licenses.length && ['licenses', '證照'],
+  services.length && ['services', '專業服務'],
+  ...custom.map((s: any, i: number) => [`custom-${i}`, s.title]),
+  feedback.length && ['student-feedback', '學生回饋'],
+].filter(Boolean) as [string, string][];
+
+const description = t.bio?.slice(0, 120) || `${t.name}，${t.title}。專業領域：${t.specialty ?? ''}。黎明技術學院影視傳播系師資介紹。`;
+---
+
+<BaseLayout title={`${t.name} | 師資陣容 | 影視傳播系`} description={description} ogImage={t.photo} ogType="profile">
+  <!-- 基本資料區塊（有影片時放側欄，沒影片時放照片旁） -->
+  <section class="t-hero pt-32 pb-8 px-6 bg-gradient-to-br from-film-gray to-film-black">
+    <div class="max-w-6xl mx-auto">
+      <a href="/faculty" class="inline-flex items-center gap-2 text-film-light/60 hover:text-film-gold text-sm min-h-[44px]">← 回師資陣容</a>
+      <h1 class="font-display text-4xl md:text-6xl text-white font-bold mt-2 mb-2">{t.name}</h1>
+      {t.name_en && <p class="text-film-light/50 text-sm mb-2">{t.name_en}</p>}
+      <p class="text-film-gold text-sm md:text-base">{t.title}</p>
+
+      <div class:list={['grid gap-1 mt-7', 'md:grid-cols-[280px_minmax(0,1fr)]']}>
+        {t.photo ? (
+          <img src={t.photo} alt={`${t.name}老師照片`} class="w-full aspect-[4/5] md:aspect-auto md:h-[350px] object-cover object-top bg-film-gray" />
+        ) : (
+          <div class="w-full aspect-[4/5] md:aspect-auto md:h-[350px] bg-film-gray flex items-center justify-center">
+            <span class="font-display text-7xl text-film-gold/30">{t.name[0]}</span>
+          </div>
+        )}
+
+        {hasVideo ? (
+          <div class="flex flex-col bg-film-black md:h-[350px] min-w-0">
+            <div class="relative flex-1 aspect-video md:aspect-auto bg-black">
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${ytId}`}
+                title={`《${t.video.title}》${t.video.kind ?? ''}`}
+                loading="lazy"
+                class="absolute inset-0 w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin"
+              ></iframe>
+            </div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 bg-film-gray text-sm">
+              {t.video.title && <strong class="text-white">《{t.video.title}》</strong>}
+              {t.video.kind && <span class="text-film-light/50">{t.video.kind}</span>}
+              <a href={t.video.url} target="_blank" rel="noopener noreferrer" class="md:ml-auto text-film-gold hover:underline min-h-[40px] inline-flex items-center">在 YouTube 觀看 ↗</a>
+            </div>
+          </div>
+        ) : (
+          <div class="bg-film-black/60 p-6 md:px-8 md:h-[350px] overflow-y-auto" data-facts>
+            <dl class="t-facts">
+              {t.specialty && <div><dt>專業領域</dt><dd>{t.specialty}</dd></div>}
+              {education.length > 0 && <div><dt>學歷</dt><dd>{education.map((e) => <span class="block">{e}</span>)}</dd></div>}
+              {t.links?.map((l: any) => <div><dt>{l.label}</dt><dd><a href={l.url} target="_blank" rel="noopener noreferrer" class="text-film-gold hover:underline break-all">{l.url}</a></dd></div>)}
+            </dl>
+          </div>
+        )}
+      </div>
+
+      {jump.length > 1 && (
+        <nav class="flex gap-6 overflow-x-auto no-scrollbar whitespace-nowrap border-b border-white/10 mt-6" aria-label="頁內導覽">
+          {jump.map(([id, label]) => <a href={`#${id}`} data-jump class="text-sm text-film-light/80 hover:text-film-gold min-h-[44px] inline-flex items-center">{label}</a>)}
+        </nav>
+      )}
+    </div>
+  </section>
+
+  <div class:list={['t-layout max-w-6xl mx-auto px-6 pt-12 pb-24', { 't-has-side': hasVideo || feedback.length > 0 }]}>
+    <div class="t-main min-w-0">
+      {paragraphs.length > 0 && (
+        <section id="about" class="t-sec">
+          <h2 class="t-title">個人簡介</h2>
+          {paragraphs.map((p: string) => <p class="text-film-light/80 leading-loose mb-4 whitespace-pre-line">{p.trim()}</p>)}
+        </section>
+      )}
+
+      {selected.length > 0 && (
+        <section id="selected" class="t-sec">
+          <h2 class="t-title">代表作品</h2>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {selected.map((w: any) => (
+              <article class="bg-film-gray overflow-hidden">
+                {w.image ? (
+                  <img src={w.image} alt={w.title} loading="lazy" class="w-full aspect-[3/4] object-cover" />
+                ) : (
+                  <div class="aspect-[3/4] flex items-end p-3 bg-gradient-to-br from-film-gold/25 to-film-black"><b class="text-white leading-snug">{workName(w)}</b></div>
+                )}
+                <div class="p-3">
+                  {w.image && <p class="text-white font-semibold text-sm mb-1">{workName(w)}</p>}
+                  {w.type && <p class="text-film-light/50 text-xs mb-1">{w.type}</p>}
+                  {w.role && <p class="text-film-light/80 text-xs leading-relaxed">{w.role}</p>}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {works.length > 0 && (
+        <section id="credits" class="t-sec">
+          <h2 class="t-title">作品列表</h2>
+          {categories.length > 1 && (
+            <div class="flex flex-wrap gap-2 mb-4" data-filters="credit-list" aria-label="作品分類">
+              <button type="button" data-filter="all" aria-pressed="true" class="t-chip t-chip-on">全部</button>
+              {categories.map((c) => <button type="button" data-filter={c} aria-pressed="false" class="t-chip">{c}</button>)}
+            </div>
+          )}
+          <div id="credit-list" data-collapse>
+            {works.map((w: any) => (
+              <article data-row data-cat={w.category ?? ''} class="flex gap-4 py-4 border-t border-white/10">
+                {w.image && <img src={w.image} alt="" loading="lazy" class="w-16 h-20 object-cover shrink-0" />}
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-white font-semibold mb-1 break-words">{workName(w)}</h3>
+                  {w.role && <p class="text-film-light/70 text-sm leading-relaxed">{w.role}</p>}
+                  {(w.platform || w.note) && <p class="text-film-light/50 text-sm leading-relaxed">{[w.platform, w.note].filter(Boolean).join('｜')}</p>}
+                  {w.awards?.length > 0 && (
+                    <ul class="mt-2 space-y-0.5">{w.awards.map((a: string) => <li class="text-film-gold/80 text-xs leading-relaxed break-words">{a}</li>)}</ul>
+                  )}
+                  {w.video && <a href={w.video} target="_blank" rel="noopener noreferrer" class="inline-block mt-2 text-film-gold text-xs hover:underline">觀看影片 ↗</a>}
+                </div>
+                <div class="text-right text-film-light/50 text-xs shrink-0 max-w-[35%] leading-relaxed">
+                  {w.year && <p class="font-mono">{w.year}</p>}
+                  {w.type && <p>{w.type}</p>}
+                </div>
+              </article>
+            ))}
+          </div>
+          {works.length > COLLAPSE_AT && <button type="button" data-more class="t-chip mt-4">顯示全部</button>}
+        </section>
+      )}
+
+      {experience.length > 0 && (
+        <section id="experience" class="t-sec">
+          <h2 class="t-title">教學與專業經歷</h2>
+          {experience.map((e: any) => (
+            <div class="py-4 border-t border-white/10">
+              <p class="text-white font-semibold">{[e.org, e.role].filter(Boolean).join('｜')}</p>
+              {period(e) && <p class="text-film-gold text-sm font-mono mt-1">{period(e)}</p>}
+              {e.detail && <p class="text-film-light/60 text-sm leading-relaxed mt-1">{e.detail}</p>}
+            </div>
+          ))}
+        </section>
+      )}
+
+      {awards.length > 0 && (
+        <section id="awards" class="t-sec">
+          <h2 class="t-title">獲獎紀錄</h2>
+          {awards.map((a: any) => (
+            <p class="py-3 border-t border-white/10 text-film-light/80 text-sm leading-relaxed">
+              {a.year && <span class="font-mono text-film-gold mr-3">{a.year}</span>}{a.title}
+            </p>
+          ))}
+        </section>
+      )}
+
+      {projects.length > 0 && (
+        <section id="projects" class="t-sec">
+          <h2 class="t-title">產學計畫</h2>
+          <div data-collapse>
+            {projects.map((p: any) => (
+              <div data-row class="py-3 border-t border-white/10">
+                <p class="text-white text-sm leading-relaxed break-words">{p.title}</p>
+                <p class="text-film-light/50 text-xs mt-1 leading-relaxed">
+                  {[p.year, p.funder, p.role].filter(Boolean).join('｜')}
+                </p>
+              </div>
+            ))}
+          </div>
+          {projects.length > COLLAPSE_AT && <button type="button" data-more class="t-chip mt-4">顯示全部</button>}
+        </section>
+      )}
+
+      {papers.length > 0 && (
+        <section id="papers" class="t-sec">
+          <h2 class="t-title">研究論文</h2>
+          {paperGroups.map((g) => (
+            <div class="mb-8">
+              <h3 class="text-film-gold text-sm font-semibold mb-2">{g.name}</h3>
+              <div data-collapse>
+                {g.items.map((p: any) => <p data-row class="py-3 border-t border-white/10 text-film-light/70 text-sm leading-relaxed break-words">{p.citation}</p>)}
+              </div>
+              {g.items.length > COLLAPSE_AT && <button type="button" data-more class="t-chip mt-4">顯示全部</button>}
+            </div>
+          ))}
+        </section>
+      )}
+
+      {teaching.length > 0 && (
+        <section id="teaching" class="t-sec">
+          <h2 class="t-title">教學指導</h2>
+          {teaching.map((g: any) => (
+            <div class="py-3 border-t border-white/10">
+              <p class="text-white text-sm">{(g.works ?? []).map((w: string) => `《${w}》`).join('、')}</p>
+              <p class="text-film-light/50 text-xs mt-1">{[g.year, g.type, g.role].filter(Boolean).join('｜')}</p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {licenses.length > 0 && (
+        <section id="licenses" class="t-sec">
+          <h2 class="t-title">專業證照</h2>
+          {licenses.map((l) => <p class="py-3 border-t border-white/10 text-film-light/80 text-sm leading-relaxed break-words">{l}</p>)}
+        </section>
+      )}
+
+      {services.length > 0 && (
+        <section id="services" class="t-sec">
+          <h2 class="t-title">專業服務</h2>
+          {services.map((s) => <p class="py-3 border-t border-white/10 text-film-light/80 text-sm leading-relaxed">{s}</p>)}
+        </section>
+      )}
+
+      {custom.map((s: any, i: number) => (
+        <section id={`custom-${i}`} class="t-sec">
+          <h2 class="t-title">{s.title}</h2>
+          {s.items.map((x: string) => <p class="py-3 border-t border-white/10 text-film-light/80 text-sm leading-relaxed">{x}</p>)}
+        </section>
+      ))}
+    </div>
+
+    {(hasVideo || feedback.length > 0) && (
+      <aside class="t-side">
+        {hasVideo && (
+          <div class="t-side-facts">
+            <h2 class="text-white text-lg font-semibold border-b border-white/10 pb-3">教師資料</h2>
+            <dl class="t-facts">
+              <div><dt>職稱</dt><dd>{t.title}</dd></div>
+              {t.specialty && <div><dt>專業領域</dt><dd>{t.specialty}</dd></div>}
+              {education.length > 0 && <div><dt>學歷</dt><dd>{education.map((e) => <span class="block">{e}</span>)}</dd></div>}
+              {t.links?.map((l: any) => <div><dt>{l.label}</dt><dd><a href={l.url} target="_blank" rel="noopener noreferrer" class="text-film-gold hover:underline break-all">{l.url}</a></dd></div>)}
+            </dl>
+          </div>
+        )}
+        {feedback.length > 0 && (
+          <section id="student-feedback" class="t-side-feedback">
+            <h2 class="t-title !text-xl">學生回饋</h2>
+            {feedback.some((f: any) => f.demo) && <p class="text-film-light/50 text-xs mb-3">以下為示範內容</p>}
+            {feedback.map((f: any) => (
+              <article class="bg-film-gray border border-white/10 p-5 mb-3">
+                <span class="block font-display text-4xl leading-none text-film-gold" aria-hidden="true">“</span>
+                <p class="text-film-light/90 text-sm leading-loose my-3">{f.text}</p>
+                <p class="border-t border-white/10 pt-3 text-white text-sm font-semibold">
+                  {f.name || '匿名'}{f.demo && <span class="text-film-light/50 font-normal text-xs">｜示範</span>}
+                </p>
+              </article>
+            ))}
+          </section>
+        )}
+      </aside>
+    )}
+  </div>
+</BaseLayout>
+
+<style is:global>
+  .t-sec { margin-bottom: 3.5rem; scroll-margin-top: 6rem; }
+  #student-feedback { scroll-margin-top: 6rem; }
+  .t-title { display: flex; align-items: center; gap: .75rem; font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: 1.25rem; }
+  .t-title::before { content: ''; width: 4px; height: 1.6rem; border-radius: 3px; background: #c9a84c; flex: none; }
+  .t-facts > div { padding: .8rem 0; border-bottom: 1px solid rgb(255 255 255 / .08); font-size: .9rem; line-height: 1.7; }
+  .t-facts dt { color: #fff; font-weight: 600; margin-bottom: .15rem; }
+  .t-facts dd { color: rgb(240 237 232 / .65); }
+  .t-chip { display: inline-flex; align-items: center; min-height: 40px; padding: .35rem .9rem; font-size: .85rem; border: 1px solid rgb(255 255 255 / .2); color: rgb(240 237 232 / .8); transition: all .2s; }
+  .t-chip:hover { border-color: #c9a84c; color: #c9a84c; }
+  .t-chip-on { background: #c9a84c; border-color: #c9a84c; color: #0a0a0a; }
+  .t-chip-on:hover { color: #0a0a0a; }
+  .t-chip:focus-visible, [data-jump]:focus-visible { outline: 2px solid #c9a84c; outline-offset: 2px; }
+  .t-layout.t-has-side { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 3.5rem; }
+  /* 手機：基本資料排在長作品與經歷之前，學生回饋在最後 */
+  @media (max-width: 800px) {
+    .t-layout.t-has-side { display: flex; flex-direction: column; gap: 0; }
+    .t-side { display: contents; }
+    .t-side-facts { order: 0; margin-bottom: 2.5rem; }
+    .t-main { order: 1; }
+    .t-side-feedback { order: 2; }
+  }
+</style>
+
+<script>
+  const LIMIT = 10;
+  document.querySelectorAll<HTMLElement>('[data-collapse]').forEach((box) => {
+    const rows = [...box.querySelectorAll<HTMLElement>(':scope > [data-row]')];
+    const next = box.nextElementSibling as HTMLElement | null;
+    const more = next?.matches('[data-more]') ? next : null;
+    const bar = box.id ? document.querySelector<HTMLElement>(`[data-filters="${box.id}"]`) : null;
+    let open = false;
+    let cat = 'all';
+
+    const apply = () => {
+      const match = rows.filter((r) => cat === 'all' || r.dataset.cat === cat);
+      rows.forEach((r) => r.classList.add('hidden'));
+      match.forEach((r, i) => r.classList.toggle('hidden', !open && i >= LIMIT));
+      if (more) {
+        more.classList.toggle('hidden', match.length <= LIMIT);
+        more.textContent = open ? '收合' : '顯示全部';
+      }
+    };
+    more?.addEventListener('click', () => { open = !open; apply(); });
+    bar?.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        cat = btn.dataset.filter!;
+        bar.querySelectorAll('[data-filter]').forEach((b) => {
+          b.classList.toggle('t-chip-on', b === btn);
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+        apply();
+      });
+    });
+    apply();
+  });
+
+  // 頁內導覽：配合平滑捲動
+  document.querySelectorAll<HTMLAnchorElement>('[data-jump]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const target = document.querySelector<HTMLElement>(a.getAttribute('href')!);
+      const lenis = (window as any).__lenis;
+      if (target && lenis) { e.preventDefault(); lenis.scrollTo(target, { offset: -90 }); }
+    });
+  });
+</script>

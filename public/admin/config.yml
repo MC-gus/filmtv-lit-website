@@ -31,18 +31,236 @@ collections:
 
   - name: faculty
     label: 👨‍🏫 師資資料
+    label_singular: 老師
+    description: 點老師姓名進入編輯；按右上角「＋ 老師」可新增老師，系統會自動產生個人頁面。沒填的欄位前台不會顯示。
     folder: src/content/faculty
     create: true
+    delete: true
     identifier_field: name
     summary: "{{name}}（{{title}}）"
+    sortable_fields: [order, name]
+    editor: { preview: false }
     fields:
+      # ── 基本資料 ──
       - { label: 姓名, name: name, widget: string }
+      - { label: 英文姓名, name: name_en, widget: string, required: false }
       - { label: 職稱, name: title, widget: string }
-      - { label: 專長領域, name: specialty, widget: string }
-      - { label: 照片, name: photo, widget: image, required: false, hint: "直式照片（3:4），半身以上" }
-      - { label: 第二張照片（滑鼠移上去時顯示）, name: photo_hover, widget: image, required: false, hint: "建議同尺寸、不同表情或工作照；沒上傳就不切換" }
-      - { label: 簡介, name: bio, widget: text }
-      - { label: 排序, name: order, widget: number, default: 99 }
+      - { label: 專業領域, name: specialty, widget: string, hint: "用頓號分隔，例如：電影導演、編劇。師資列表卡片也會顯示" }
+      - label: 學歷
+        name: education
+        widget: list
+        required: false
+        label_singular: 學歷
+        field: { label: 學歷, name: item, widget: string }
+      - { label: 個人簡介, name: bio, widget: text, required: false, hint: "空一行＝新段落" }
+      - label: 公開聯絡方式或連結
+        name: links
+        widget: list
+        required: false
+        label_singular: 連結
+        summary: "{{fields.label}}"
+        fields:
+          - { label: 名稱, name: label, widget: string, hint: "例如：個人網站、Email" }
+          - { label: 網址或內容, name: url, widget: string }
+      - { label: 列表排序, name: order, widget: number, default: 99, value_type: int, hint: "數字越小，在師資陣容排越前面" }
+      - { label: 在前台隱藏這位老師, name: hidden, widget: boolean, default: false, required: false, hint: "打開後師資列表與個人頁都不顯示，資料仍保留；要永久移除才用「刪除」" }
+
+      # ── 照片與影片 ──
+      - { label: 照片, name: photo, widget: image, required: false, hint: "JPG 或 PNG，建議 2MB 以下。沒有照片時會顯示姓氏" }
+      - { label: 第二張照片（列表滑鼠移上去時顯示）, name: photo_hover, widget: image, required: false, hint: "沒上傳就不切換" }
+      - label: 精選影片（顯示在照片旁）
+        name: video
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - { label: YouTube 網址, name: url, widget: string, required: false, hint: "貼上一般 YouTube 網址即可；留空就不顯示影片" }
+          - { label: 作品名稱, name: title, widget: string, required: false }
+          - { label: 影片類型, name: kind, widget: string, required: false, hint: "例如：預告片" }
+
+      # ── 作品（代表作品由這裡勾選）──
+      - label: 作品列表
+        name: works
+        widget: list
+        required: false
+        label_singular: 作品
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.title}}（{{fields.year}}）"
+        hint: "可拖曳調整順序。想放進「代表作品」就打開該作品的「設為代表作品」，不會自動選取"
+        fields:
+          - { label: 作品名稱, name: title, widget: string, hint: "只填片名，不要加書名號、平台或職務" }
+          - { label: 年份, name: year, widget: string, required: false, hint: "不確定就留空" }
+          - { label: 作品類型, name: type, widget: string, required: false, hint: "例如：電影短片、紀錄片、電視劇" }
+          - { label: 篩選分類, name: category, widget: select, required: false, options: [電影與短片, 紀錄片, 影集與電視劇, 網路節目, 廣告與宣傳, 舞台與展演, 音樂, 主持, 其他], hint: "前台作品列表上方的分類按鈕" }
+          - { label: 老師職務, name: role, widget: string, required: false, hint: "例如：導演、編劇；片尾曲《好了歌》主唱" }
+          - { label: 平台或單位, name: platform, widget: string, required: false }
+          - { label: 補充說明, name: note, widget: string, required: false }
+          - label: 獎項及影展紀錄
+            name: awards
+            widget: list
+            required: false
+            label_singular: 紀錄
+            field: { label: 紀錄, name: item, widget: string }
+          - { label: 海報或劇照, name: image, widget: image, required: false }
+          - { label: 作品影片網址, name: video, widget: string, required: false }
+          - { label: 設為代表作品, name: featured, widget: boolean, required: false }
+          - { label: 代表作品順序, name: featured_order, widget: number, required: false, value_type: int, hint: "數字越小越前面，只有設為代表作品時才用到" }
+          - { label: 名稱是描述文字（不加書名號）, name: descriptive, widget: boolean, required: false, hint: "沒有正式片名時打開，例如「形象宣傳片」" }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+          - { label: 原始記載（核對用，不顯示在網站）, name: raw, widget: text, required: false }
+
+      # ── 經歷 ──
+      - label: 教學與專業經歷
+        name: experience
+        widget: list
+        required: false
+        label_singular: 經歷
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.org}}｜{{fields.role}}"
+        fields:
+          - { label: 機構, name: org, widget: string }
+          - { label: 職稱, name: role, widget: string, required: false }
+          - { label: 開始時間, name: start, widget: string, required: false }
+          - { label: 結束時間, name: end, widget: string, required: false }
+          - { label: 目前仍在職, name: current, widget: boolean, required: false }
+          - { label: 工作內容, name: detail, widget: text, required: false }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+
+      - label: 獲獎紀錄
+        name: awards
+        widget: list
+        required: false
+        label_singular: 獎項
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.year}} {{fields.title}}"
+        fields:
+          - { label: 年份, name: year, widget: string, required: false }
+          - { label: 獎項內容, name: title, widget: string }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+
+      # ── 論文與計畫 ──
+      - label: 產學計畫
+        name: projects
+        widget: list
+        required: false
+        label_singular: 計畫
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.year}} {{fields.title}}"
+        fields:
+          - { label: 年度, name: year, widget: string, required: false }
+          - { label: 計畫名稱, name: title, widget: string }
+          - { label: 委託或補助單位, name: funder, widget: string, required: false }
+          - { label: 擔任角色, name: role, widget: string, required: false }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+          - { label: 原始記載（核對用，不顯示在網站）, name: raw, widget: text, required: false }
+
+      - label: 研究論文
+        name: papers
+        widget: list
+        required: false
+        label_singular: 論文
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.category}}：{{fields.citation}}"
+        fields:
+          - { label: 分類, name: category, widget: select, options: [期刊論文, 研討會論文, 學位論文, 其他] }
+          - { label: 論文資料, name: citation, widget: text, hint: "作者、題名、出處等完整文字" }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+
+      - label: 教學指導
+        name: teaching
+        widget: list
+        required: false
+        label_singular: 指導紀錄
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.year}} {{fields.type}}"
+        fields:
+          - { label: 年份, name: year, widget: string, required: false }
+          - label: 指導作品
+            name: works
+            widget: list
+            label_singular: 作品
+            field: { label: 作品名稱, name: item, widget: string }
+          - { label: 類型, name: type, widget: string, required: false }
+          - { label: 指導角色, name: role, widget: string, required: false }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+
+      - label: 專業證照
+        name: licenses
+        widget: list
+        required: false
+        label_singular: 證照
+        collapsed: true
+        field: { label: 證照, name: item, widget: string }
+
+      - label: 專業服務
+        name: services
+        widget: list
+        required: false
+        label_singular: 服務紀錄
+        collapsed: true
+        field: { label: 服務紀錄, name: item, widget: string }
+
+      - label: 其他自訂欄目
+        name: custom_sections
+        widget: list
+        required: false
+        label_singular: 欄目
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.title}}"
+        hint: "這位老師有其他類別時在這裡新增，例如：專業實務、演出紀錄"
+        fields:
+          - { label: 欄目標題, name: title, widget: string }
+          - label: 內容
+            name: items
+            widget: list
+            label_singular: 內容
+            field: { label: 內容, name: item, widget: text }
+          - { label: 在前台隱藏這個欄目, name: hidden, widget: boolean, required: false }
+
+      # ── 學生回饋 ──
+      - label: 學生回饋
+        name: feedback
+        widget: list
+        required: false
+        label_singular: 回饋
+        collapsed: true
+        minimize_collapsed: true
+        summary: "{{fields.name}}：{{fields.text}}"
+        hint: "只放經學生同意的內容"
+        fields:
+          - { label: 署名, name: name, widget: string, required: false, hint: "留空會顯示「匿名」" }
+          - { label: 回饋內容, name: text, widget: text }
+          - { label: 這是示範內容（前台會標示「示範」）, name: demo, widget: boolean, required: false }
+          - { label: 在前台隱藏這筆, name: hidden, widget: boolean, required: false }
+
+      # ── 顯示設定 ──
+      - label: 暫時關閉的欄目
+        name: hidden_sections
+        widget: select
+        multiple: true
+        required: false
+        hint: "選到的欄目前台不顯示，資料仍保留"
+        options:
+          - { label: 個人簡介, value: about }
+          - { label: 精選影片, value: video }
+          - { label: 代表作品, value: selected }
+          - { label: 作品列表, value: credits }
+          - { label: 教學與專業經歷, value: experience }
+          - { label: 獲獎紀錄, value: awards }
+          - { label: 產學計畫, value: projects }
+          - { label: 研究論文, value: papers }
+          - { label: 教學指導, value: teaching }
+          - { label: 專業證照, value: licenses }
+          - { label: 專業服務, value: services }
+          - { label: 學生回饋, value: feedback }
+      - { label: 待確認事項（只在後台看得到，不顯示在網站）, name: review_notes, widget: text, required: false }
 
   - name: mentors
     label: 🎓 業師講座
