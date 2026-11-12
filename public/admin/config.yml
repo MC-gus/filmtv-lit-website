@@ -365,7 +365,7 @@ collections:
           - { label: 理念標題, name: philosophy_title, widget: string }
           - { label: 理念說明, name: philosophy_text, widget: text, hint: "空一行＝新段落；只按一次 Enter＝段落內換行。段落數量自由決定" }
           - { label: 理念區塊圖片, name: philosophy_image, widget: image, required: false, hint: "顯示在理念文字右側，建議 4:3 比例" }
-          - { label: 理念區塊影片, name: philosophy_video, widget: file, required: false, hint: "貼上 YouTube 網址，或上傳 MP4（建議 15MB 以下）。影片會靜音自動循環播放，觀眾可自行開聲音；有影片時優先顯示影片，圖片當作載入前的畫面" }
+          - { label: 理念區塊影片, name: philosophy_video, widget: file, required: false, hint: "貼上 YouTube 網址，或上傳 MP4（建議 15MB 以下）。影片會靜音自動循環播放，不顯示播放器介面；有影片時優先顯示影片，上方的圖片會當作封面" }
           - { label: 教育目標英文副標題, name: goals_subtitle, widget: string }
           - { label: 教育目標標題, name: goals_title, widget: string }
           - label: 教育目標（四項）

@@ -1,0 +1,59 @@
+---
+// 不顯示 YouTube 介面的自動播放影片：靜音、循環、隱藏控制列與標題；
+// 封面圖疊在影片上方，影片真的開始播放才淡出；被擋下自動播放時就一直顯示封面
+// （影片本身要保持可見，瀏覽器才會允許自動播放）
+interface Props {
+  id: string;         // YouTube 影片 ID
+  poster?: string;    // 封面圖；沒給就用 YouTube 縮圖
+  title?: string;
+}
+const { id, poster, title = '' } = Astro.props;
+const cover = poster || `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+const src = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&fs=0&enablejsapi=1`;
+---
+
+<div class="relative w-full h-full overflow-hidden bg-black" data-yt-bg>
+  <iframe
+    src={src}
+    title={title}
+    tabindex="-1"
+    aria-hidden="true"
+    allow="autoplay; encrypted-media"
+    class="absolute inset-0 w-full h-full scale-[1.4] pointer-events-none"
+  ></iframe>
+  <img src={cover} alt={title} loading="lazy" data-yt-cover class="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700" />
+</div>
+
+<script>
+  const frames = [...document.querySelectorAll<HTMLIFrameElement>('[data-yt-bg] iframe')];
+  if (frames.length) {
+    const w = window as any;
+    const prev = w.onYouTubeIframeAPIReady;
+    w.onYouTubeIframeAPIReady = () => {
+      prev?.();
+      frames.forEach((f) => {
+        const cover = f.parentElement?.querySelector<HTMLElement>('[data-yt-cover]');
+        const reveal = () => { if (cover) cover.style.opacity = '0'; };
+        const player = new w.YT.Player(f, {
+          events: {
+            onReady: (e: any) => { e.target.mute(); e.target.playVideo(); },
+            onStateChange: (e: any) => { if (e.data === 1) reveal(); }, // 1 = 播放中
+          },
+        });
+        // 影片可能在監聽接上前就已開始播放，補上主動檢查（最多 15 秒）
+        let tries = 0;
+        const timer = setInterval(() => {
+          if (player.getPlayerState?.() === 1) { reveal(); clearInterval(timer); }
+          else if (++tries > 30) clearInterval(timer);
+        }, 500);
+      });
+    };
+    if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+      const s = document.createElement('script');
+      s.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(s);
+    } else if (w.YT?.Player) {
+      w.onYouTubeIframeAPIReady();
+    }
+  }
+</script>
