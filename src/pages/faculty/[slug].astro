@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { photoAttrs, cropStyle } from '../../lib/photo';
 
 export async function getStaticPaths() {
   const all = await getCollection('faculty').catch(() => []);
@@ -71,7 +72,9 @@ const description = t.bio?.slice(0, 120) || `${t.name}，${t.title}。專業領�
 
       <div class:list={['grid gap-1 mt-7', 'md:grid-cols-[280px_minmax(0,1fr)]']}>
         {t.photo ? (
-          <img src={t.photo} alt={`${t.name}老師照片`} class="w-full aspect-[4/5] md:aspect-auto md:h-[350px] object-cover object-top bg-film-gray" />
+          <div class="w-full aspect-[4/5] md:aspect-auto md:h-[350px] overflow-hidden bg-film-gray">
+            <img {...photoAttrs(t.photo, '(min-width: 768px) 280px, 100vw')} alt={`${t.name}老師照片`} class="w-full h-full object-cover" style={cropStyle(t.photo_crop)} />
+          </div>
         ) : (
           <div class="w-full aspect-[4/5] md:aspect-auto md:h-[350px] bg-film-gray flex items-center justify-center">
             <span class="font-display text-7xl text-film-gold/30">{t.name[0]}</span>

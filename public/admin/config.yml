@@ -66,7 +66,12 @@ collections:
       - { label: 在前台隱藏這位老師, name: hidden, widget: boolean, default: false, required: false, hint: "打開後師資列表與個人頁都不顯示，資料仍保留；要永久移除才用「刪除」" }
 
       # ── 照片與影片 ──
-      - { label: 照片, name: photo, widget: image, required: false, hint: "JPG 或 PNG，建議 2MB 以下。沒有照片時會顯示姓氏" }
+      - { label: 照片, name: photo, widget: image, required: false, hint: "JPG 或 PNG，可直接上傳原始照片，網站會自動壓縮成適合網頁的大小。沒有照片時會顯示姓氏" }
+      - label: 照片構圖
+        name: photo_crop
+        widget: photo-crop
+        required: false
+        frames: [{ ratio: "3 / 4", label: "師資列表卡片" }, { ratio: "4 / 5", label: "個人頁" }]
       - { label: 第二張照片（列表滑鼠移上去時顯示）, name: photo_hover, widget: image, required: false, hint: "沒上傳就不切換" }
       - label: 精選影片（顯示在照片旁）
         name: video
@@ -279,6 +284,11 @@ collections:
         options: [導演, 攝影師, 剪輯師, 製片人, 聲音設計, 新媒體創作者]
         hint: "對應師資頁的六大分類標籤，可勾選多個"
       - { label: 照片, name: photo, widget: image, required: false }
+      - label: 照片構圖
+        name: photo_crop
+        widget: photo-crop
+        required: false
+        frames: [{ ratio: "1 / 1", label: "業師卡片" }]
       - { label: 簡介, name: bio, widget: text }
       - { label: 授課學期, name: semester, widget: string, required: false, hint: "例如：113學年度上學期" }
       - { label: 排序, name: order, widget: number, default: 99 }
