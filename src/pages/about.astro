@@ -2,6 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import data from '../content/settings/about.json';
+
+// 理念區塊影片：YouTube 網址或上傳的 MP4（影片網址誤貼在圖片欄也照樣播放）
+const ytOf = (u?: string) => u?.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
+const philoVideo = data.philosophy_video || (ytOf(data.philosophy_image) ? data.philosophy_image : '');
+const philoYt = ytOf(philoVideo);
+const philoImage = ytOf(data.philosophy_image) ? '' : data.philosophy_image;
 ---
 
 <BaseLayout
@@ -26,9 +32,24 @@ import data from '../content/settings/about.json';
         </div>
       </div>
       <div class="reveal-right relative">
-        {data.philosophy_image ? (
+        {philoYt ? (
+          <div class="aspect-video overflow-hidden border border-white/10 bg-black">
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${philoYt}?autoplay=1&mute=1&loop=1&playlist=${philoYt}&playsinline=1&rel=0&modestbranding=1`}
+              title={data.philosophy_title}
+              loading="lazy"
+              class="w-full h-full"
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+              allowfullscreen
+            ></iframe>
+          </div>
+        ) : philoVideo ? (
+          <div class="aspect-video overflow-hidden border border-white/10 bg-black">
+            <video src={philoVideo} poster={philoImage || undefined} autoplay muted loop playsinline controls class="w-full h-full object-cover"></video>
+          </div>
+        ) : philoImage ? (
           <div class="aspect-[4/3] overflow-hidden border border-white/10">
-            <img src={data.philosophy_image} alt={data.philosophy_title} class="w-full h-full object-cover" />
+            <img src={philoImage} alt={data.philosophy_title} class="w-full h-full object-cover" />
           </div>
         ) : (
           <div class="aspect-[4/3] bg-film-gray border border-white/10 flex items-center justify-center">
