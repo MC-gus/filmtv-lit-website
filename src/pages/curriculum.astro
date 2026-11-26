@@ -20,7 +20,7 @@ import data from '../content/settings/curriculum.json';
 
   <section data-section="四年課程" class="py-12 px-6">
     <div class="max-w-7xl mx-auto space-y-6">
-      {data.years.map((year, i) => (
+      {(data.years ?? []).map((year, i) => (
         <div class="reveal border border-white/10 hover:border-film-gold/50 transition-colors duration-300"
              style={`transition-delay: ${i * 100}ms`}>
           <div class="grid grid-cols-1 md:grid-cols-4">
@@ -31,7 +31,7 @@ import data from '../content/settings/curriculum.json';
             </div>
             <div class="md:col-span-3 p-8">
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {year.courses.map(course => (
+                {(year.courses ?? []).map(course => (
                   <div class="text-film-light/70 text-sm py-2 px-3 bg-white/5 hover:bg-film-gold/10 hover:text-film-gold transition-colors text-center">
                     {course}
                   </div>
@@ -51,7 +51,7 @@ import data from '../content/settings/curriculum.json';
         <h2 class="font-display text-4xl text-white">{data.features_title}</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {data.features.map((item, i) => (
+        {(data.features ?? []).map((item, i) => (
           <div class="reveal p-10 border border-white/10 hover:border-film-gold group transition-colors"
                style={`transition-delay: ${i * 150}ms`}>
             <div class="text-5xl mb-6">{item.icon}</div>

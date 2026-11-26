@@ -94,7 +94,7 @@ const mentors = allMentors.sort((a, b) => (a.data.order ?? 99) - (b.data.order ?
 
         <!-- 可點擊的分類標籤 -->
         <div class="reveal-right grid grid-cols-2 gap-4">
-          {pageData.mentor_roles.map((role: string) => (
+          {(pageData.mentor_roles ?? []).map((role: string) => (
             <button
               class="mentor-filter-btn border border-white/10 hover:border-film-gold p-4 text-center transition-all duration-300 cursor-pointer group"
               data-role={role}
