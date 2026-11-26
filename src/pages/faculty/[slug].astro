@@ -39,7 +39,8 @@ const categories = [...new Set(works.map((w: any) => w.category).filter(Boolean)
 const ytId = t.video?.url?.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/)?.[1];
 const hasVideo = !!ytId && !off.includes('video');
 
-const workName = (w: any) => (w.descriptive ? w.title : `《${w.title}》`);
+// 名稱本身已有書名號（《》〈〉「」）或標為描述文字時，不再自動加書名號
+const workName = (w: any) => (w.descriptive || /[《〈「]/.test(w.title ?? '') ? w.title : `《${w.title}》`);
 const period = (e: any) => [e.start, e.current ? '至今' : e.end].filter(Boolean).join(' – ');
 const education: string[] = t.education ?? [];
 
